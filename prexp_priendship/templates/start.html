@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.click {
+	cursor: pointer;
+}
+.click-title {
+	font-size: 3rem!important;
+	display: none;
+}
+.card-list{
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+ 
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.card-emt{
+	display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+</style>
+<div class="container">
+
+	<div class="row">
+		<div style="margin-top:10px;" class="col s12">
+			<h5 class="left grey-text text-darken-3">Q. 가장 친하다고 생각하는 2명을 골라주세요</h3>			
+		</div>
+	</div>
+	<div class="row card-list">
+	{% for p in rp_list %}
+		<div class="col s4 card-emt">
+			<div id="p{{forloop.counter}}" class="click card">
+				<div class="card-image">
+					<img class="p-img" src="{{p.photo}}">
+					<span class="click-title p{{forloop.counter}}-title card-title"><i class="material-icons">check_circle</i></span>
+				</div>
+				<div class="center card-content">
+					{{p.name}}
+				</div>			
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+
+<script>
+
+var clicked_list = [];
+
+
+$(".click").click(function(){
+	$id = $(this).attr("id");
+	if(clicked_list.indexOf($id) == -1){
+		clicked_list.push($id);
+	} else {
+		clicked_list.splice(clicked_list.indexOf($id), 1);
+	}
+
+	var class_select = "."+$id+"-title";
+	$(class_select).toggle("slow");
+	console.log(clicked_list);
+
+	if(clicked_list.length == 2){
+		$(".card").removeClass("click");
+		for(var idx=0; idx<2; idx++){
+			$("#"+clicked_list[idx]).slideUp("slow");
+		}
+		if(clicked_list.indexOf("p3") == -1){
+			Materialize.toast('+10 point', 4000, alert_tutorial());
+		} else {
+			Materialize.toast('-10 point', 4000, alert_tutorial());
+		}
+	}
+
+});
+
+
+</script>
+
+
+<script>
+{% for p in rp_list %}
+console.log("{{p.name}}");
+{% endfor %}
+
+</script>
+
+{% endblock %}
