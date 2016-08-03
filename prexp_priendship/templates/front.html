@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<style>
+.click {
+	cursor: pointer;
+}
+.click-title {
+	font-size: 3rem!important;
+	display: none;
+}
+</style>
 
 <div class="container">
 
@@ -19,13 +27,89 @@
 		</div>
 	</div>
 	<div class="row">
+		<div class="chip left">튜토리얼</div>
 		<div class="col s12">
-			<div class="chip">튜토리얼</div>
-			<h5 class="left orange-text">Q. 가장 친하다고 생각하는 2명을 골라주세요</h3>
-			
+			<h5 class="left orange-text">Q. 가장 친하다고 생각하는 2명을 골라주세요</h3>			
+		</div>
+		
+		<div class="col m2 offset-m3 s4">
+			<div id="p1" class="click card">
+				<div class="card-image">
+					<img src="https://lh6.googleusercontent.com/-2lJYGtfXKwQ/AAAAAAAAAAI/AAAAAAAB2HQ/QSmIw0nQN_c/s0-c-k-no-ns/photo.jpg">
+					<span class="click-title p1-title card-title"><i class="material-icons">check_circle</i></span>
+				</div>
+				<div class="center card-content">
+					오바마
+				</div>
+			</div>
+		</div>
+		<div class="col m2 s4">
+			<div id="p2" class="click card">
+				<div class="card-image">
+					<img src="https://lh4.googleusercontent.com/-eXKU4UhFusI/AAAAAAAAAAI/AAAAAAAAATA/1QahWqsqd-I/s0-c-k-no-ns/photo.jpg">
+					<span class="click-title p2-title card-title"><i class="material-icons">check_circle</i></span>
+				</div>
+				<div class="center card-content">
+					클린턴
+				</div>			
+			</div>
+		</div>
+		<div class="col m2 s4">
+			<div id="p3" class="click card">
+				<div class="card-image">
+					<img src="https://lh5.googleusercontent.com/-Sv0q6lkSAGM/AAAAAAAAAAI/AAAAAAAAADA/V2au8qwIkVA/s0-c-k-no-ns/photo.jpg">
+					<span class="click-title p3-title card-title"><i class="material-icons">check_circle</i></span>
+				</div>
+				<div class="center card-content">
+					트럼프
+				</div>
+			</div>
 		</div>
 	</div>		
-
 </div>
+
+
+
+<script>
+
+var clicked_list = [];
+
+function alert_tutorial(){
+	setTimeout(function() {
+		alert("이렇게 동작합니다. 아시겠죠i?");
+		alert("그러면 시작합니다.");
+		location.href = "/start"
+	}, 1000);
+}
+
+$(".click").click(function(){
+	$id = $(this).attr("id");
+	if(clicked_list.indexOf($id) == -1){
+		clicked_list.push($id);
+	} else {
+		clicked_list.splice(clicked_list.indexOf($id), 1);
+	}
+
+	var class_select = "."+$id+"-title";
+	$(class_select).toggle("slow");
+	console.log(clicked_list);
+
+	if(clicked_list.length == 2){
+		$(".card").removeClass("click");
+		for(var idx=0; idx<2; idx++){
+			$("#"+clicked_list[idx]).slideUp("slow");
+		}
+		if(clicked_list.indexOf("p3") == -1){
+			Materialize.toast('+10 point', 4000, alert_tutorial());
+		} else {
+			Materialize.toast('-10 point', 4000, alert_tutorial());
+		}
+	}
+
+});
+
+
+</script>
+
 
 {% endblock %}
