@@ -20,5 +20,8 @@ def front(request):
 	return render(request, "front.html")
 
 def start(request):
+	if request.method == "POST":
+		print(request.POST)
+
 	p_list = Politician.objects.all().order_by("?")
 	return render(request, "start.html", {"rp_list": p_list[:6]})

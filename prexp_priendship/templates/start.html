@@ -31,10 +31,14 @@
 		<div style="margin-top:10px;" class="col s12">
 			<h5 class="left grey-text text-darken-3">Q. 가장 친하다고 생각하는 2명을 골라주세요</h3>			
 		</div>
+		<div class="right">
+			<p class="grey-text">카드 크기가 개성이 넘치지만, 나중에 해결하겠습니다.</p>
+		</div>
 	</div>
 	<div class="row card-list">
 	{% for p in rp_list %}
-		<div class="col s4 card-emt">
+		{% if forloop.counter == 1 or forloop.counter == 4 %}<div class="col m2 offset-m3 s4 card-emt asdf">
+		{% else %}<div class="col m2 s4 card-emt">{% endif %}
 			<div id="p{{forloop.counter}}" class="click card">
 				<div class="card-image">
 					<img class="p-img" src="{{p.photo}}">
@@ -48,7 +52,11 @@
 	{% endfor %}
 	</div>
 </div>
-
+<form id="log-submit" method="POST">
+	{% csrf_token %}
+	<input type="hidden" name="shown_p" value="tbd">
+	<input type="hidden" name="select_p" value="tbd">
+</form>
 <script>
 
 var clicked_list = [];
@@ -67,15 +75,13 @@ $(".click").click(function(){
 	console.log(clicked_list);
 
 	if(clicked_list.length == 2){
+		
 		$(".card").removeClass("click");
+		$("#log-submit").submit();
 		for(var idx=0; idx<2; idx++){
 			$("#"+clicked_list[idx]).slideUp("slow");
 		}
-		if(clicked_list.indexOf("p3") == -1){
-			Materialize.toast('+10 point', 4000, alert_tutorial());
-		} else {
-			Materialize.toast('-10 point', 4000, alert_tutorial());
-		}
+
 	}
 
 });
