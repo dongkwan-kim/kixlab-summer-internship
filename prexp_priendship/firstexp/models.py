@@ -10,6 +10,6 @@ class Politician(models.Model):
 class SubmitLog(models.Model):
 	# csv
 	token = models.CharField(max_length=50)
-	shown_list = models.CharField(max_length=30)
-	select_list = models.CharField(max_length=30)
+	shown_list = models.CharField(max_length=100)
+	select_list = models.CharField(max_length=70)
 	q_kind = models.CharField(max_length=5)
