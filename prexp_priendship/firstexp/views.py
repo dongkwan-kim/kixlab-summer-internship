@@ -24,6 +24,19 @@ def reg_db(request):
 		new_p.save()
 	return HttpResponse("success!")
 
+def export_logs(request):
+	out_file = open("submit_logs.txt", "w")
+	q_kind_dict = dict([(x.content, x.color) for x in q_list])
+	for sl in SubmitLog.objects.all():
+		line = "\t".join([sl.token,
+						  q_kind_dict[sl.q_kind],
+						  sl.shown_list,
+						  sl.select_list
+						])
+		out_file.write(line+"\r\n")
+	out_file.close()
+	return HttpResponse("success!")
+	
 def front(request):
 	return render(request, "front.html")
 
