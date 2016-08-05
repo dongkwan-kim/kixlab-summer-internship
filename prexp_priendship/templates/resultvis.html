@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+#mynetwork {
+	width: 600px;
+	height: 400px;
+	border: 1px solid lightgray;
+}
+</style>
+
+<div id="mynetwork"></div>
+
+<script>
+
+var raw_nodes = [{'id': '9770592', 'label': '원유철'}, {'id': '9770916', 'label': '이정현'}, {'id': '2140', 'label': '박근혜'}, {'id': '9770598', 'label': '윤상현'}, {'id': '9770568', 'label': '박지원'}, {'id': '9771072', 'label': '이상돈'}, {'id': '9770743', 'label': '김한길'}, {'id': '9770465', 'label': '최경환'}, {'id': '9770194', 'label': '이종걸'}, {'id': '9770659', 'label': '추미애'}, {'id': '9770759', 'label': '문재인'}, {'id': '9770994', 'label': '표창원'}, {'id': '9770943', 'label': '이혜훈'}, {'id': '9770698', 'label': '김태호'}, {'id': '9771006', 'label': '정진석'}, {'id': '9770497', 'label': '유승민'}, {'id': '9770903', 'label': '나경원'}, {'id': '9770957', 'label': '정종섭'}, {'id': '1819', 'label': '노무현'}, {'id': '9770879', 'label': '이해찬'}, {'id': '9770885', 'label': '한명숙'}, {'id': '9770871', 'label': '우상호'}, {'id': '9771013', 'label': '정동영'}, {'id': '9770347', 'label': '박영선'}, {'id': '9770906', 'label': '권은희'}, {'id': '9770532', 'label': '김성태'}, {'id': '9771057', 'label': '김종인'}, {'id': '9770462', 'label': '진영'}, {'id': '9770869', 'label': '심상정'}, {'id': '9770898', 'label': '서청원'}, {'id': '9770937', 'label': '금태섭'}, {'id': '9770450', 'label': '조경태'}, {'id': '9770273', 'label': '황우여'}, {'id': '9770229', 'label': '정병국'}, {'id': '9770078', 'label': '남경필'}, {'id': '9770896', 'label': '안철수'}, {'id': '9770084', 'label': '문희상'}, {'id': '9770226', 'label': '정몽준'}, {'id': '9770387', 'label': '유기준'}, {'id': '9770895', 'label': '김무성'}, {'id': '9770990', 'label': '조응천'}, {'id': '9770694', 'label': '이재오'}, {'id': '9770960', 'label': '김부겸'}, {'id': '9770138', 'label': '심재철'}, {'id': '9770197', 'label': '이한구'}, {'id': '9770858', 'label': '하태경'}];
+var raw_edges = [{'to': '9770916', 'from': '9770592', 'color': {'color': 'green'}, 'value': 2}, {'to': '9770598', 'from': '2140', 'color': {'color': 'green'}, 'value': 2}, {'to': '9771072', 'from': '9770568', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770743', 'from': '9770568', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770592', 'from': '9770465', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770659', 'from': '9770194', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770994', 'from': '9770759', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770994', 'from': '9770943', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770698', 'from': '9770465', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771006', 'from': '2140', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770903', 'from': '9770497', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770957', 'from': '9770592', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770879', 'from': '1819', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770885', 'from': '9770659', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771013', 'from': '9770871', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770943', 'from': '9770347', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771072', 'from': '9770906', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770759', 'from': '9770194', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771057', 'from': '9770532', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770869', 'from': '9770462', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771006', 'from': '9770957', 'color': {'color': 'green'}, 'value': 1}, {'to': '9770903', 'from': '2140', 'color': {'color': 'green'}, 'value': 1}, {'to': '9771057', 'from': '9770879', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770906', 'from': '9770698', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770937', 'from': '9770898', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770916', 'from': '9770759', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771006', 'from': '9770194', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770916', 'from': '9770879', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770568', 'from': '9770450', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771006', 'from': '9770450', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770916', 'from': '9770273', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770871', 'from': '9770229', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770896', 'from': '9770078', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770903', 'from': '9770084', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770896', 'from': '9770194', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771013', 'from': '9770226', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771057', 'from': '9770592', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770759', 'from': '9770387', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770896', 'from': '9770592', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771072', 'from': '9770898', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770895', 'from': '9770347', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770990', 'from': '9770903', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770994', 'from': '9770957', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770960', 'from': '9770694', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770659', 'from': '9770138', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770694', 'from': '9770194', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770898', 'from': '9770698', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770871', 'from': '9770465', 'color': {'color': 'red'}, 'value': 1}, {'to': '9771013', 'from': '9770916', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770994', 'from': '2140', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770465', 'from': '9770226', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770898', 'from': '1819', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770197', 'from': '1819', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770568', 'from': '9770273', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770903', 'from': '9770759', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770694', 'from': '9770598', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770903', 'from': '9770347', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770937', 'from': '2140', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770994', 'from': '9770858', 'color': {'color': 'red'}, 'value': 1}, {'to': '9770895', 'from': '9770759', 'color': {'color': 'red'}, 'value': 2}, {'to': '9770898', 'from': '9770885', 'color': {'color': 'red'}, 'value': 2}];
+
+var nodes = new vis.DataSet(raw_nodes);
+var edges = new vis.DataSet(raw_edges);
+
+var container = document.getElementById('mynetwork');
+var data = {
+	nodes: nodes,
+	edges: edges
+};
+
+var options = {};
+
+var network = new vis.Network(container, data, options);
+
+
+</script>
+{% endblock %}

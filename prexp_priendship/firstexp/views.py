@@ -36,7 +36,10 @@ def export_logs(request):
 		out_file.write(line+"\r\n")
 	out_file.close()
 	return HttpResponse("success!")
-	
+
+def visualize(request):
+	return render(request, "resultvis.html")
+
 def front(request):
 	return render(request, "front.html")
 
