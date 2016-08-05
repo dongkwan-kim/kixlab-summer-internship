@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from firstexp.models import Politician, SubmitLog
 from random import randrange
+import firstexp.py_submit_log_analyzer as sla
 
 # Create your views here.
 
@@ -38,7 +39,8 @@ def export_logs(request):
 	return HttpResponse("success!")
 
 def visualize(request):
-	return render(request, "resultvis.html")
+	visjs_network = sla.create_visjs_with_whole_process()
+	return render(request, "resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1]})
 
 def front(request):
 	return render(request, "front.html")
