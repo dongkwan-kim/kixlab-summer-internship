@@ -46,6 +46,7 @@ def create_network_from_logs(pair_list, option=0):
 		for sl in sl_list:
 			select_tuple = tuple(sorted(sl.select_list.split(",")))
 			q_kind = q_hash[sl.q_kind]
+			print(q_kind)
 			if len(select_tuple) == 2:
 				if q_kind == "red":
 					p_network[select_tuple] -= 1
