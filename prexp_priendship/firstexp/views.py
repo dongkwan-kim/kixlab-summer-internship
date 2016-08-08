@@ -40,17 +40,16 @@ def export_logs(request):
 
 def visualize(request):
 	visjs_network = sla.create_visjs_with_whole_process()
-	return render(request, "resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1]})
+	return render(request, "firstexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1]})
 
 def front(request):
-	return render(request, "front.html")
+	return render(request, "firstexp/front.html")
 
 def start(request):
 	# how many did a user solve
 	num_of_sol = 0
 
 	if request.method == "POST":
-		print(request.POST)
 		# log save
 		_token = request.POST["csrfmiddlewaretoken"]
 		_q_kind = request.POST["q_kind"]
@@ -64,4 +63,4 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})
+	return render(request, "firstexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})

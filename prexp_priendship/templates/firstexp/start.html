@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.click {
+	cursor: pointer;
+}
+.click-title {
+	font-size: 3rem!important;
+	display: none;
+}
+.card-list{
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+ 
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.card-emt{
+	display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.card-content {
+	padding: 10px!important;
+}
+
+</style>
+<div class="container">
+
+	<div class="row">
+		<div style="margin-top:10px;" class="col s12">
+			<h5 class="center grey-text text-darken-3">가장 <span class="{{q_kind.color}}-text">{{q_kind.content}}다</span>고 생각하는 2명을 골라주세요</h3>			
+		</div>
+	</div>
+	
+	<div class="row">
+		<a id="dont-know" class="click col m3 offset-m3 s6 light-green darken-1 waves-effect waves-light btn">모르겠음</a>
+		<a id="seems-no" class="click col m3 s6 lime waves-effect darken-1 waves-light btn">없는 것 같음</a>
+	</div>
+
+	<div class="row card-list">
+	{% for p in rp_list %}
+		{% if forloop.counter == 1 or forloop.counter == 4 %}<div class="col m2 offset-m3 s4 card-emt asdf">
+		{% else %}<div class="col m2 s4 card-emt">{% endif %}
+			<div id="{{p.pid}}" class="click card">
+				<div class="card-image">
+					<img class="p-img" src="{{p.photo}}">
+					<span class="click-title {{p.pid}}-title card-title"><i class="material-icons green-text">check_circle</i></span>
+				</div>
+				<div class="center card-content">
+					{{p.name}}
+				</div>			
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	
+	<div class="right">
+		<p class="grey-text">카드 크기가 개성이 넘치지만, 나중에 해결하겠습니다.</p>
+	</div>
+
+</div>
+<form id="log-submit" method="POST">
+	{% csrf_token %}
+	<input type="hidden" name="q_kind" value="{{q_kind.content}}">
+	<input id="inp-shown" type="hidden" name="shown_p" value="tbd">
+	<input id="inp-select" type="hidden" name="select_p" value="tbd">
+</form>
+<script>
+var shown_list = []
+$(document).ready(function(){
+	{% for p in rp_list %}
+	shown_list.push({{p.pid}});
+	{% endfor %}
+	$("#inp-shown").attr("value", shown_list.join(","));
+});
+
+var clicked_list = [];
+
+$(".click").click(function(){
+
+	$id = $(this).attr("id");
+	
+	if($.isNumeric($id)){
+
+		if(clicked_list.indexOf($id) == -1){
+			clicked_list.push($id);
+		} else {
+			clicked_list.splice(clicked_list.indexOf($id), 1);
+		}
+
+		var class_select = "."+$id+"-title";
+		$(class_select).toggle("slow");
+
+		if(clicked_list.length == 2){
+		
+			$(".card").removeClass("click");
+			$("#inp-select").attr("value", clicked_list.join(","));
+			for(var idx=0; idx<2; idx++){
+				$("#"+clicked_list[idx]).slideUp("slow");
+			}
+			if({{nos}} == 6){
+				alert("7개면 충분하지만, 더 많이 하시면 더욱 좋습니다"); 
+			}
+			setTimeout(function(){
+				$("#log-submit").submit();
+			}, 600);
+		}
+	} else {
+		$("#inp-select").attr("value", $id);
+		$("#log-submit").submit();
+	}
+});
+
+</script>
+{% endblock %}
