@@ -4,6 +4,8 @@ from secondexp.models import Politician, SubmitLog
 from random import randrange
 import secondexp.py_submit_log_analyzer as sla
 
+# binary realtion with news api
+
 # Create your views here.
 
 class Question():
