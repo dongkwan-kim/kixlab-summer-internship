@@ -61,8 +61,6 @@
 	</div>		
 </div>
 
-
-
 <script>
 
 function alert_tutorial(){
@@ -104,7 +102,11 @@ $(".range-affinity").change(function(){
 });
 
 $(".affinity-score-btn").click(function(){
-	Materialize.toast('I am a toast', 2000, '', function(){alert_tutorial()})
+	if($(this).hasClass("disabled") == false){
+		$(this).addClass("disabled");	
+		var score = $(".range-affinity").val() * 10;
+		Materialize.toast(get_sgn_num_str(score) + " points", 2000, '', function(){alert_tutorial()});
+	}
 });
 
 
