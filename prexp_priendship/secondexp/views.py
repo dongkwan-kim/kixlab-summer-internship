@@ -5,6 +5,7 @@ from random import randrange
 import secondexp.py_submit_log_analyzer as sla
 
 # binary realtion with news api
+exp_name = "2nd prototype"
 
 class Question():
 	def __init__(self, content, color):
@@ -40,10 +41,10 @@ def export_logs(request):
 
 def visualize(request):
 	visjs_network = sla.create_visjs_with_whole_process()
-	return render(request, "secondexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1]})
+	return render(request, "secondexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1], "exp_name": exp_name})
 
 def front(request):
-	return render(request, "secondexp/front.html")
+	return render(request, "secondexp/front.html", {"exp_name": exp_name})
 
 def start(request):
 	# how many did a user solve
@@ -63,4 +64,4 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "second/start.html", {"rp_list": p_list[:2], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})
+	return render(request, "second/start.html", {"rp_list": p_list[:2], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})

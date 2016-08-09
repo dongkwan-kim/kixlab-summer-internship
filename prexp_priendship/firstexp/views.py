@@ -5,6 +5,7 @@ from random import randrange
 import firstexp.py_submit_log_analyzer as sla
 
 # Create your views here.
+exp_name = "1st prototype"
 
 class Question():
 	def __init__(self, content, color):
@@ -40,10 +41,10 @@ def export_logs(request):
 
 def visualize(request):
 	visjs_network = sla.create_visjs_with_whole_process()
-	return render(request, "firstexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1]})
+	return render(request, "firstexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1], "exp_name": exp_name})
 
 def front(request):
-	return render(request, "firstexp/front.html")
+	return render(request, "firstexp/front.html", {"exp_name": exp_name})
 
 def start(request):
 	# how many did a user solve
@@ -63,4 +64,4 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "firstexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})
+	return render(request, "firstexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})
