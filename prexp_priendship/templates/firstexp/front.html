@@ -75,11 +75,9 @@
 var clicked_list = [];
 
 function alert_tutorial(){
-	setTimeout(function() {
-		alert("이렇게 동작합니다. 아시겠죠i?");
-		alert("그러면 시작합니다.");
-		location.href = "../start"
-	}, 1000);
+	alert("이렇게 동작합니다. 아시겠죠i?");
+	alert("그러면 시작합니다.");
+	location.href = "../start"
 }
 
 $(".click").click(function(){
@@ -100,9 +98,9 @@ $(".click").click(function(){
 			$("#"+clicked_list[idx]).slideUp("slow");
 		}
 		if(clicked_list.indexOf("p3") == -1){
-			Materialize.toast('+10 point', 4000, alert_tutorial());
+			Materialize.toast('+10 point', 2000, '', function(){alert_tutorial()});
 		} else {
-			Materialize.toast('-10 point', 4000, alert_tutorial());
+			Materialize.toast('-10 point', 2000, '', function(){alert_tutorial()});
 		}
 	}
 
