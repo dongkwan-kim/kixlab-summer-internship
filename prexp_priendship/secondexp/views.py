@@ -6,8 +6,6 @@ import secondexp.py_submit_log_analyzer as sla
 
 # binary realtion with news api
 
-# Create your views here.
-
 class Question():
 	def __init__(self, content, color):
 		self.content = content
@@ -65,4 +63,4 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "second/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})
+	return render(request, "second/start.html", {"rp_list": p_list[:2], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol})
