@@ -22,5 +22,5 @@ urlpatterns = [
 	url(r"^start/", "firstexp.views.start"),
 	url(r"^reg/", "firstexp.views.reg_db"),
 	url(r"^export/", "firstexp.views.export_logs"),
-	url(r"^vis/", "firstexp.views.visualize",)
+	url(r"^vis/", "firstexp.views.visualize"),
 ]

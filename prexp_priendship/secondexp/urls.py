@@ -18,4 +18,8 @@ from django.contrib import admin
 
 urlpatterns = [
 	url(r"^home/", "secondexp.views.front"),
+	url(r"^start/", "secondexp.views.start"),
+	url(r"^reg/", "secondexp.views.reg_db"),
+	url(r"^export/", "secondexp.views.export_logs"),
+	url(r"^vis/", "secondexp.views.visualize"),
 ]
