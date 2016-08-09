@@ -16,7 +16,7 @@ q_list = [Question("친하", "green"), Question("안 친하", "red")]
 def reg_db(request):
 	for p in Politician.objects.all():
 		p.delete()
-	for line in open("utf8_mod_unified_assembly_50.txt", "r"):
+	for line in open("mod_utf8_unified_assembly_50.txt", "r"):
 		ll = line.split("\t")
 		_name = ll[0]
 		_photo = ll[7]
