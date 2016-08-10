@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from secondexp.models import Politician, SubmitLog
 from random import randrange
 import secondexp.py_submit_log_analyzer as sla
+import secondexp.py_newsapi as na
 
 # binary realtion with news api
 exp_name = "2nd prototype"
@@ -62,4 +63,7 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "secondexp/start.html", {"rp_list": p_list[:2], "nos": num_of_sol, "exp_name": exp_name})
+	rp_list = p_list[:2]
+	nn = na.NaverNewsXML(" ".join([str(x.name) for x in rp_list]), display=3)
+	news_list = nn.get_news_items()
+	return render(request, "secondexp/start.html", {"rp_list": rp_list, "nos": num_of_sol, "exp_name": exp_name, "news_list": news_list})

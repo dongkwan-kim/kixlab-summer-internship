@@ -76,11 +76,14 @@ function set_affinity_score(val){
 	$("#inp-affinity-score").attr("value", val);
 }
 
-var shown_list = []
+var shown_list = [];
 $(document).ready(function(){
 	set_affinity_score(0);	
 	{% for p in rp_list %}
 	shown_list.push({{p.pid}});
+	{% endfor %}
+	{% for news in news_list %}
+	
 	{% endfor %}
 	$("#inp-shown").attr("value", shown_list.join(","));
 });
