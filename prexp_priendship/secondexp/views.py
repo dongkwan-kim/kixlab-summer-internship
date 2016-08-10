@@ -28,10 +28,8 @@ def reg_db(request):
 
 def export_logs(request):
 	out_file = open("submit_logs.txt", "w")
-	q_kind_dict = dict([(x.content, x.color) for x in q_list])
 	for sl in SubmitLog.objects.all():
 		line = "\t".join([sl.token,
-						  q_kind_dict[sl.q_kind],
 						  sl.shown_list,
 						  sl.select_list
 						])
@@ -51,12 +49,12 @@ def start(request):
 	num_of_sol = 0
 
 	if request.method == "POST":
+		print(request.POST)
 		# log save
 		_token = request.POST["csrfmiddlewaretoken"]
-		_q_kind = request.POST["q_kind"]
 		_shown_list = request.POST["shown_p"]
-		_select_list = request.POST["select_p"]
-		new_log = SubmitLog(token=_token, q_kind=_q_kind, shown_list=_shown_list, select_list=_select_list)
+		_affinity_score = request.POST["affinity_score"]
+		new_log = SubmitLog(token=_token, shown_list=_shown_list, affinity_score=_affinity_score)
 		new_log.save()
 		# num_of_sol update
 		log_list = SubmitLog.objects.filter(token=_token)
@@ -64,4 +62,4 @@ def start(request):
 	
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "second/start.html", {"rp_list": p_list[:2], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})
+	return render(request, "secondexp/start.html", {"rp_list": p_list[:2], "nos": num_of_sol, "exp_name": exp_name})
