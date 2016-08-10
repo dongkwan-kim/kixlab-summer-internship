@@ -25,7 +25,7 @@ class NaverNewsXML():
 		# this must be decoded to utf-8
 		return urllib.request.urlopen(request)
 
-	def get_news_items():
+	def get_news_items(self):
 		res = self.get_response()
 		xml = res.read().decode("utf-8")
 		root = ET.fromstring(xml)
@@ -47,6 +47,6 @@ class NaverNewsItem():
 		self.pub_date = pub_date
 
 if __name__ == "__main__":
-	nn = NaverNews("박근혜 유승민")
+	nn = NaverNewsXML("박근혜 유승민")
 	for it in nn.get_news_items():
 		print(it.title)
