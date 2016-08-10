@@ -16,7 +16,7 @@ class NaverNewsXML():
 		base_url = "https://openapi.naver.com/v1/search/news.xml"
 		base_url += "?query="+urllib.parse.quote(str(self.query))
 		base_url += "&sort="+str(sort)
-		base_url += "&display="+str(display)
+		base_url += "&display="+str(self.display)
 
 		request = urllib.request.Request(base_url)
 		request.add_header("X-Naver-Client-Id", self.client_id)
