@@ -16,7 +16,6 @@
 	position: fixed!important
 }
 
-
 @media (max-width: 600px){
 
 	#news-col {
@@ -36,14 +35,14 @@
 
 	<div class="row">
 		<div style="margin-top:10px;" class="col s12">
-			<h6 class="center grey-text text-darken-3"><b>둘의 개인적 친밀도를 평가해주세요</b></h6>			
+			<h6 class="center grey-text text-darken-3"><b>최근 둘의 정치적 친밀도를 평가해주세요</b></h6>			
 		</div>
 	</div>
 
 	<div class="row">
 	{% for p in rp_list %}
-		{% if forloop.counter == 1 %}<div class="col m3 offset-m3 s6">
-		{% else %}<div class="col m3 s6">{% endif %}
+		{% if forloop.counter == 1 %}<div class="col m3 offset-m3 s4 offset-s2">
+		{% else %}<div class="col m3 s4">{% endif %}
 			<div id="{{p.pid}}" class="card">
 				<div class="card-image">
 					<img class="p-img" src="{{p.photo}}">
@@ -55,6 +54,10 @@
 		</div>
 	{% endfor %}
 		<div class="col m6 offset-m3 s12">
+			<div class="grey-text">
+				<span class="left">안 친함</span>
+				<span class="right">친함</span>
+			</div>
     		<p class="range-field">
       			<input type="range" class="range-affinity" min="-5" max="5" />
     		</p>
@@ -72,7 +75,7 @@
 	<li class="collection-header hide-on-small-only"><b>같이 나온 뉴스</b></li>
 	{% for news in news_list %}
 	<a href="#!" id="news-{{forloop.counter}}" class="collection-item grey-text text-darken-2">
-		{{news.title|safe}}
+		{{news.title|safe|truncatechars_html:26}}
 	</a>
 	{% endfor %}
 	<a onclick="alert('아직 구현 안했는데, 이게 필요할까요?')" href="#!" style="padding:0px;" class="collection-item hide-on-small-only"><i class="material-icons">expand_more</i></a>
@@ -119,6 +122,12 @@ $(document).ready(function(){
 	{% endfor %}
 	
 	$("#inp-shown").attr("value", shown_list.join(","));
+});
+
+$(document).on('click', '#toast-container .toast', function() {
+    $(this).fadeOut(function(){
+        $(this).remove();
+    });
 });
 
 {% for news in news_list %}

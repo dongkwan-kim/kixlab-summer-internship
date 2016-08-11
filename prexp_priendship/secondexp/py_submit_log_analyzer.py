@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from firstexp.models import Politician, SubmitLog
+from secondexp.models import Politician, SubmitLog
 
 
 def create_p_hash(option=0):
@@ -37,35 +37,30 @@ def create_network_from_logs(pair_list, option=0):
 	:param option: {model(default):0, local:1}
 	:return: dict {"(pid_x, pid_y)": "weight"}
 	"""
-	p_network = dict([(x, 0) for x in pair_list])
-
+	# (x, (0, 0)) = (pair, (sum, count))
+	p_network = dict([(x, (0, 0)) for x in pair_list])
+	
 	# source from model
 	if option == 0:
-		q_hash = {"친하": "green", "안 친하": "red"}
 		sl_list = SubmitLog.objects.all()
 		for sl in sl_list:
-			select_tuple = tuple(sorted(sl.select_list.split(",")))
-			q_kind = q_hash[sl.q_kind]
-			print(q_kind)
-			if len(select_tuple) == 2:
-				if q_kind == "red":
-					p_network[select_tuple] -= 1
-				else:
-					p_network[select_tuple] += 1
+			shown_tuple = tuple(sorted(sl.shown_list.split(",")))
+			affinity_score = sl.affinity_score
+			if affinity_score != "donot-know":
+				(s, c) = p_network[shown_tuple]
+				p_network[shown_tuple] = (s+int(affinity_score), c+1)
+		for pair in p_network.keys():
+			(s, c) = p_network[pair]
+			if c != 0:
+				p_network[pair] = s/(1.0*c)
+			else:
+				p_network[pair] = 0
+
 	# source from local file
 	else:
-		for line in open("submit_logs_first_iterations.txt", "r"):
-			line = line.strip()
-			ll = line.split("\t")
+		# no need to implement
+		pass
 
-			select_tuple = tuple(sorted(ll[3].split(",")))
-			q_kind = ll[1]
-
-			if len(select_tuple) == 2:
-				if q_kind == "red":
-					p_network[select_tuple] -= 1
-				else:
-					p_network[select_tuple] += 1
 	return p_network
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
