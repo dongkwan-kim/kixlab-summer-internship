@@ -6,13 +6,24 @@
 .range-affinity {
 	height: 30px;
 }
+
+@media (max-width: 600px){
+
+	#news-col {
+		position: absolute;
+		bottom: 0px;
+		margin: 0px;
+		background-color: red!important;
+	}
+}
+
 </style>
 
 <div class="container">
 
 	<div class="row">
 		<div style="margin-top:10px;" class="col s12">
-			<h5 class="center grey-text text-darken-3">둘의 개인적 친밀도를 평가해주세요</h5>			
+			<h6 class="center grey-text text-darken-3"><b>둘의 개인적 친밀도를 평가해주세요</b></h6>			
 		</div>
 	</div>
 
@@ -40,6 +51,15 @@
 			<a class="center waves-effect waves-light btn grey lighten-1 donot-know">모르겠음</a>
 		</div>
 	</div>
+	<div class="row">
+		<ul id="news-col" class="collection">
+		{% for news in news_list %}
+			<a href="#!" id="news-{{forloop.counter}}" class="collection-item">
+				{{news.title|safe}}
+			</a>
+		{% endfor %}
+		</ul>
+	</div>
 
 </div>
 
@@ -52,7 +72,7 @@
 <script>
 
 function get_sgn_num_str(num){
-	var sgn = ""
+	var sgn = "";
 	if(num < 0){
 		sgn = "-";
 	} else if (num >0){
@@ -82,11 +102,18 @@ $(document).ready(function(){
 	{% for p in rp_list %}
 	shown_list.push({{p.pid}});
 	{% endfor %}
-	{% for news in news_list %}
 	
-	{% endfor %}
 	$("#inp-shown").attr("value", shown_list.join(","));
 });
+
+{% for news in news_list %}
+$("#news-{{forloop.counter}}").click(function(){
+	var des_str = "<p>{{news.description|safe}}<br/><span class='right'>{{news.pub_date}}</span></p>";
+	des_str = des_str.replace(/<b>/gi, '<b class="yellow-text">');
+	var $description = $(des_str);
+	Materialize.toast($description, 5000);
+});
+{% endfor %}
 
 $(".range-affinity").change(function(){
 	set_affinity_score($(this).val());
