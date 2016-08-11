@@ -7,13 +7,26 @@
 	height: 30px;
 }
 
+#news-col{
+	margin: 7px 10px;
+	text-align: center;
+	top: 58px;
+	right: 20px;
+	width: 25%;
+	position: fixed!important
+}
+
+
 @media (max-width: 600px){
 
 	#news-col {
-		position: absolute;
+		top: inherit;
+		z-index: 1;
+		width: 100%;
+		left: 0px;
+		right: 0px;
 		bottom: 0px;
 		margin: 0px;
-		background-color: red!important;
 	}
 }
 
@@ -51,17 +64,19 @@
 			<a class="center waves-effect waves-light btn grey lighten-1 donot-know">모르겠음</a>
 		</div>
 	</div>
-	<div class="row">
-		<ul id="news-col" class="collection">
-		{% for news in news_list %}
-			<a href="#!" id="news-{{forloop.counter}}" class="collection-item">
-				{{news.title|safe}}
-			</a>
-		{% endfor %}
-		</ul>
-	</div>
+	
 
 </div>
+
+<ul id="news-col" class="collection with-header">
+	<li class="collection-header hide-on-small-only"><b>같이 나온 뉴스</b></li>
+	{% for news in news_list %}
+	<a href="#!" id="news-{{forloop.counter}}" class="collection-item grey-text text-darken-2">
+		{{news.title|safe}}
+	</a>
+	{% endfor %}
+	<a onclick="alert('아직 구현 안했는데, 이게 필요할까요?')" href="#!" style="padding:0px;" class="collection-item hide-on-small-only"><i class="material-icons">expand_more</i></a>
+</ul>
 
 <form id="log-submit" method="POST">
 	{% csrf_token %}
