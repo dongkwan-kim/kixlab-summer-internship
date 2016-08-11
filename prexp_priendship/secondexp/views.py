@@ -8,13 +8,6 @@ import secondexp.py_newsapi as na
 # binary realtion with news api
 exp_name = "2nd prototype"
 
-class Question():
-	def __init__(self, content, color):
-		self.content = content
-		self.color = color
-
-q_list = [Question("친하", "green"), Question("안 친하", "red")]
-
 def reg_db(request):
 	for p in Politician.objects.all():
 		p.delete()
