@@ -41,7 +41,6 @@ def front(request):
 def start(request):
 	# how many did a user solve
 	num_of_sol = 0
-
 	if request.method == "POST":
 		print(request.POST)
 		# log save
@@ -59,4 +58,5 @@ def start(request):
 	rp_list = p_list[:2]
 	nn = na.NaverNewsXML(" ".join([str(x.name) for x in rp_list]), display=3)
 	news_list = nn.get_news_items()
+	
 	return render(request, "secondexp/start.html", {"rp_list": rp_list, "nos": num_of_sol, "exp_name": exp_name, "news_list": news_list})

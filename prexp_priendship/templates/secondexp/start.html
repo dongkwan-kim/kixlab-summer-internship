@@ -17,6 +17,13 @@
 }
 
 @media (max-width: 600px){
+	
+	.news-truncate {
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
 	#news-col {
 		top: inherit;
@@ -72,10 +79,10 @@
 </div>
 
 <ul id="news-col" class="collection with-header">
-	<li class="collection-header hide-on-small-only"><b>같이 나온 뉴스</b></li>
+	<li class="collection-header hide-on-small-only"><i class="material-icons">touch_app</i><b>같이 나온 뉴스</b></li>
 	{% for news in news_list %}
-	<a href="#!" id="news-{{forloop.counter}}" class="collection-item grey-text text-darken-2">
-		{{news.title|safe|truncatechars_html:26}}
+	<a href="#!" id="news-{{forloop.counter}}" class="collection-item news-truncate grey-text text-darken-2">
+		{{news.title|safe}}
 	</a>
 	{% endfor %}
 	<a onclick="alert('아직 구현 안했는데, 이게 필요할까요?')" href="#!" style="padding:0px;" class="collection-item hide-on-small-only"><i class="material-icons">expand_more</i></a>
@@ -116,6 +123,9 @@ function set_affinity_score(val){
 
 var shown_list = [];
 $(document).ready(function(){
+	if("{{nos}}" == "7"){
+		alert("충분히 많이 하셨습니다. 하지만 더 하셔도 됩니다! 이 메세지 이후로는 끝이 없다는 것을 유념해주세요")
+	}
 	set_affinity_score(0);	
 	{% for p in rp_list %}
 	shown_list.push({{p.pid}});
@@ -132,7 +142,7 @@ $(document).on('click', '#toast-container .toast', function() {
 
 {% for news in news_list %}
 $("#news-{{forloop.counter}}").click(function(){
-	var des_str = "<p>{{news.description|safe}}<br/><span class='right'>{{news.pub_date}}</span></p>";
+	var des_str = "<p>{{news.title|safe}}<br/><br/>{{news.description|safe}}<br/><span class='right'>{{news.pub_date}}</span></p>";
 	des_str = des_str.replace(/<b>/gi, '<b class="yellow-text">');
 	var $description = $(des_str);
 	Materialize.toast($description, 5000);
