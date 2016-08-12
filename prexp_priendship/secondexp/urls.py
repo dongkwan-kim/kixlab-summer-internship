@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+	url(r"^$", lambda r: HttpResponseRedirect("home/")),
 	url(r"^home/", "secondexp.views.front"),
 	url(r"^start/", "secondexp.views.start"),
 	url(r"^reg/", "secondexp.views.reg_db"),
