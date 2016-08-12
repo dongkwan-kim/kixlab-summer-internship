@@ -18,6 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+	url(r"^$", "adminapp.views.top_front"),
 	url(r"^firstexp/", include("firstexp.urls")),
 	url(r"^secondexp/", include("secondexp.urls")),
 ]

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container center">
+	<div style="margin-top:40px;" class="row">
+		<h5 class="grey-text text-darken-3">
+			Welcome to Prototype World!
+		</h5>
+	</div>
+	<div class="row">
+		<table class="col l6 offset-l3 m6 offset-m3 s12 centered bordered highlight">
+			<tbody>
+				<tr>
+					<td>1st</td>
+					<td><a href="/firstexp/home" class="waves-effect waves-light btn">Home</a></td>
+					<td><a href="/firstexp/start" class="waves-effect waves-light btn">Start</a></td>
+					<td><a href="firstexp/vis" class="waves-effect waves-light btn">Result</a></td>
+				</tr>
+				<tr>
+					<td>2nd</td>
+					<td><a href="/secondexp/home" class="waves-effect waves-light btn">Home</a></td>
+					<td><a href="/secondexp/start" class="waves-effect waves-light btn">Start</a></td>
+					<td><a href="/secondexp/vis" class="waves-effect waves-light btn">Result</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row">
+		<div>
+			<p class="teal-text">__Next__</p>
+		</div>
+		<div class="col l2 offset-l5 m2 offset-m5 s6 offset-s3 progress">
+			<div class="indeterminate"></div>
+		</div>
+	</div>
+<div>
+
+{% endblock %}
