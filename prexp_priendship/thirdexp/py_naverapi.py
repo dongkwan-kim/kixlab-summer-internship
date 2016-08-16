@@ -76,7 +76,7 @@ class NaverNewsItem():
 		self.pub_date = pub_date
 	
 	def __str__(self):
-		return "<NaverNews><title>{0}</title><description{1}</description><link>{2}</link><pubDate>{3}</pubDate></NaverNews>".format(self.title, self.description, self.link, self.pub_date)
+		return "<NaverNews><title>{0}</title><description>{1}</description><link>{2}</link><pubDate>{3}</pubDate></NaverNews>".format(self.title, self.description, self.link, self.pub_date)
 
 
 class NaverImageItem():
