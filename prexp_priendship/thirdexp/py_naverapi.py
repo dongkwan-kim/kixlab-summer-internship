@@ -10,12 +10,12 @@ class NaverAPIXML():
 	def __init__(self, query, kind):
 		self.query = query
 		self.kind = kind
-		(self.client_id, self.client_secret) = self.get_propoer_client(kind)
+		(self.client_id, self.client_secret) = self.get_proper_client(kind)
 
 	def __str__(self):
 		return "NaverAPIXML | query={0} | kind={1}".format(self.query, self.kind)
 
-	def get_proper_client(kind):
+	def get_proper_client(self, kind):
 		if kind == "news":
 			return ("c0p5z3dxRD1qnH6wc7I3", "Q2vDiQF2NA")
 		elif kind == "image":
