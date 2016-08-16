@@ -87,7 +87,7 @@ class NaverImageItem():
 		self.thumbnail = thumbnail
 
 	def __str__(self):
-		return "<NaverImage><title>{0}</title><link>{1}</link><thumbnail>{2}</thumbnail>".format(self.title, self.link, self.thumbnail)
+		return "<NaverImage><title>{0}</title><link>{1}</link><thumbnail>{2}</thumbnail></NaverImage>".format(self.title, self.link, self.thumbnail)
 
 
 if __name__ == "__main__":
