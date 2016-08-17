@@ -13,7 +13,10 @@ class NaverAPIXML():
 		(self.client_id, self.client_secret) = self.get_proper_client(kind)
 
 	def __str__(self):
-		return "<NaverAPIXML><query>{0}</query><kind>{1}</kind></NaverAPIXML>".format(self.query, self.kind)
+		return "<NaverAPIXML>\
+					<query>{0}</query>\
+					<kind>{1}</kind>\
+				</NaverAPIXML>".format(self.query, self.kind)
 
 	def get_proper_client(self, kind):
 		if kind == "news":
@@ -76,7 +79,12 @@ class NaverNewsItem():
 		self.pub_date = pub_date
 	
 	def __str__(self):
-		return "<NaverNews><title>{0}</title><description>{1}</description><link>{2}</link><pubDate>{3}</pubDate></NaverNews>".format(self.title, self.description, self.link, self.pub_date)
+		return "<NaverNews>\
+					<title>{0}</title>\
+					<description>{1}</description>\
+					<link>{2}</link>\
+					<pubDate>{3}</pubDate>\
+				</NaverNews>".format(self.title, self.description, self.link, self.pub_date)
 
 
 class NaverImageItem():
@@ -87,7 +95,11 @@ class NaverImageItem():
 		self.thumbnail = thumbnail
 
 	def __str__(self):
-		return "<NaverImage><title>{0}</title><link>{1}</link><thumbnail>{2}</thumbnail></NaverImage>".format(self.title, self.link, self.thumbnail)
+		return "<NaverImage>\
+					<title>{0}</title>\
+					<link>{1}</link>\
+					<thumbnail>{2}</thumbnail>\
+				</NaverImage>".format(self.title, self.link, self.thumbnail)
 
 
 if __name__ == "__main__":
