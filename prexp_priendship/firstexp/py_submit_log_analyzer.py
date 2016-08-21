@@ -75,7 +75,8 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	"""
 	node_list = []
 	edge_list = []
-
+	node_color = {"background": "white", "border": "#455a64"}
+	
 	for x, y in sorted(p_network, key=p_network.get, reverse=True):
 		if p_network[(x, y)] != 0:
 			px = str(p_hash[x])
@@ -86,9 +87,11 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 			node_x = {}
 			node_x["id"] = x
 			node_x["label"] = px
+			node_x["color"] = node_color
 			node_y = {}
 			node_y["id"] = y
 			node_y["label"] = py
+			node_y["color"] = node_color
 			if node_x not in node_list:
 				node_list.append(node_x)
 			if node_y not in node_list:
@@ -99,10 +102,10 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 			edge["to"] = y
 			if int_weight > 0:
 				# familiar relation: pos weight
-				edge["color"] = {"color":"green"}
+				edge["color"] = {"color": "green", "highlight": "green"}
 			else:
 				# unfaimilar relation: neg weight
-				edge["color"] = {"color":"red"}
+				edge["color"] = {"color":"red", "highlight": "red"}
 			edge["value"] = abs(int_weight)
 			edge_list.append(edge)
 
