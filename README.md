@@ -16,3 +16,7 @@
 - Idea from Turing Test
 - Create AI with Microsoft Emotion API and Naver Image API
 - Show users some PPAs of someone(either AI or Human) scored. Users will grade PPA to judge whether someone is AI or Human.
+
+### fourthexp
+- Before users start game, they choose their favorite politician.
+- Others are same as firstexp
