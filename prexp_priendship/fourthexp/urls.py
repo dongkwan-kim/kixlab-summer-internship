@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-	url(r"^$", "adminapp.views.top_front"),
-	url(r"^firstexp/", include("firstexp.urls")),
-	url(r"^secondexp/", include("secondexp.urls")),
-	url(r"^fourthexp/", include("fourthexp.urls")),
+	url(r"^$", lambda r: HttpResponseRedirect("home/")),
+	url(r"^home/", "fourthexp.views.front"),
+	url(r"^start/", "fourthexp.views.start"),
+	url(r"^reg/", "fourthexp.views.reg_db"),
+	url(r"^export/", "fourthexp.views.export_logs"),
+	url(r"^vis/", "fourthexp.views.visualize"),
 ]
