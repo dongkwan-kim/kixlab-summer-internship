@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 	'secondexp',
 	'thirdexp',
 	'fourthexp',
+    'wjapp',
 )
 
 MIDDLEWARE_CLASSES = (

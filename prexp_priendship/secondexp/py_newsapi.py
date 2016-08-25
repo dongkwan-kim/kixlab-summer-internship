@@ -5,7 +5,7 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 
 class NaverNewsXML():
-	
+
 	def __init__(self, query, display=10):
 		self.client_id = "c0p5z3dxRD1qnH6wc7I3"
 		self.client_secret = "Q2vDiQF2NA"
@@ -21,7 +21,7 @@ class NaverNewsXML():
 		request = urllib.request.Request(base_url)
 		request.add_header("X-Naver-Client-Id", self.client_id)
 		request.add_header("X-Naver-Client-Secret", self.client_secret)
-		
+
 		# this must be decoded to utf-8
 		return urllib.request.urlopen(request)
 
@@ -39,7 +39,7 @@ class NaverNewsXML():
 		return r_list
 
 class NaverNewsItem():
-	
+
 	def __init__(self, title, link, description, pub_date):
 		self.title = title
 		self.link = link

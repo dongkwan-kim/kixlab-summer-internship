@@ -8,7 +8,7 @@ def create_p_hash(option=0):
 	:return: dict {"pid":"name"}
 	"""
 	p_hash = {}
-    
+
 	# source from model
 	if option == 0:
 		p_list = Politician.objects.all()
@@ -38,34 +38,40 @@ def create_network_from_logs(pair_list, option=0):
 	:return: dict {"(pid_x, pid_y)": "weight"}
 	"""
 	p_network = dict([(x, 0) for x in pair_list])
-
+	p_list = Politician.objects.all()
+	p_cnt_hash = dict([(str(p.pid), 0) for p in p_list])
 	# source from model
 	if option == 0:
 		q_hash = {"친하": "green", "안 친하": "red"}
 		sl_list = SubmitLog.objects.all()
 		for sl in sl_list:
 			select_tuple = tuple(sorted(sl.select_list.split(",")))
+			shown_tuple = tuple(sorted(sl.shown_list.split(",")))
 			q_kind = q_hash[sl.q_kind]
+			
+			for se in shown_tuple:
+				p_cnt_hash[se] += 1
+				
 			if len(select_tuple) == 2:
 				if q_kind == "red":
 					p_network[select_tuple] -= 1
 				else:
 					p_network[select_tuple] += 1
+		for pair in p_network.keys():
+			s = p_network[pair]
+			c = 0
+			for p in pair:
+				c += p_cnt_hash[p]
+			if c != 0:
+				p_network[pair] = (300*s)/(1.0*c)
+			else:
+				p_network[pair] = 0
 	# source from local file
 	else:
-		for line in open("submit_logs_first_iterations.txt", "r"):
-			line = line.strip()
-			ll = line.split("\t")
-
-			select_tuple = tuple(sorted(ll[3].split(",")))
-			q_kind = ll[1]
-
-			if len(select_tuple) == 2:
-				if q_kind == "red":
-					p_network[select_tuple] -= 1
-				else:
-					p_network[select_tuple] += 1
+		# no need to implemetn
+		pass
 	return p_network
+
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	"""
@@ -76,7 +82,7 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	node_list = []
 	edge_list = []
 	node_color = {"background": "white", "border": "#455a64"}
-	
+
 	for x, y in sorted(p_network, key=p_network.get, reverse=True):
 		if p_network[(x, y)] != 0:
 			px = str(p_hash[x])

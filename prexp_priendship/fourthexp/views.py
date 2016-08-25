@@ -31,9 +31,9 @@ def export_logs(request):
 	q_kind_dict = dict([(x.content, x.color) for x in q_list])
 	for sl in SubmitLog.objects.all():
 		line = "\t".join([sl.token,
-						  q_kind_dict[sl.q_kind],
-						  sl.shown_list,
-						  sl.select_list
+						q_kind_dict[sl.q_kind],
+						sl.shown_list,
+						sl.select_list
 						])
 		out_file.write(line+"\r\n")
 	out_file.close()
