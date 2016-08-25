@@ -66,7 +66,7 @@ def start(request):
 		# num_of_sol update
 		log_list = SubmitLog.objects.filter(token=_token)
 		num_of_sol = len(log_list)
-	
+
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
 	return render(request, "fourthexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})

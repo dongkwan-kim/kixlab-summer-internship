@@ -8,7 +8,7 @@ def create_p_hash(option=0):
 	:return: dict {"pid":"name"}
 	"""
 	p_hash = {}
-    
+
 	# source from model
 	if option == 0:
 		p_list = Politician.objects.all()
@@ -39,7 +39,7 @@ def create_network_from_logs(pair_list, option=0):
 	"""
 	# (x, (0, 0)) = (pair, (sum, count))
 	p_network = dict([(x, (0, 0)) for x in pair_list])
-	
+
 	# source from model
 	if option == 0:
 		sl_list = SubmitLog.objects.all()
@@ -72,13 +72,13 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	node_list = []
 	edge_list = []
 	node_color = {"background": "white", "border": "#455a64"}
-	
+
 	for x, y in sorted(p_network, key=p_network.get, reverse=True):
 		if p_network[(x, y)] != 0:
 			px = str(p_hash[x])
 			py = str(p_hash[y])
 			int_weight = int(p_network[(x, y)])
-			
+
 			# only save node which has edges
 			node_x = {}
 			node_x["id"] = x

@@ -52,11 +52,11 @@ def start(request):
 		# num_of_sol update
 		log_list = SubmitLog.objects.filter(token=_token)
 		num_of_sol = len(log_list)
-	
+
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
 	rp_list = p_list[:2]
 	nn = na.NaverNewsXML(" ".join([str(x.name) for x in rp_list]), display=3)
 	news_list = nn.get_news_items()
-	
+
 	return render(request, "secondexp/start.html", {"rp_list": rp_list, "nos": num_of_sol, "exp_name": exp_name, "news_list": news_list})
