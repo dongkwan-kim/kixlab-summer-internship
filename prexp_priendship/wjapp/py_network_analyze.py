@@ -44,6 +44,7 @@ class GED():
 			raise(Exception("NotIsomorphicError"))
 
 	def is_isomorphic(self, g1, g2):
+		# not implemented
 		return True
 
 	def cost(self, v):
@@ -55,7 +56,7 @@ class GED():
 		nbr2_dict = self.g2.get_neighbors(v)
 		union_keys = list(set(nbr1_dict.keys()+nbr2.keys()))
 		union_dict = {}
-
+		# not implemented
 
 		cost = 1
 		return cost
@@ -69,7 +70,8 @@ class GED():
 		# where P(g1, g2) denotes the set of edit paths transforming g1 into g2
 		# and c(e) >=0 is the cost of each graph edit operation e
 		# graph edit operation includes (v, e) X (insert, delete, substiute)
-
+		
+		# not implemented
 		ged = None
 		for v in self.g1.v_list:
 			c = self.cost(v)

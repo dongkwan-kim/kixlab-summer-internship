@@ -52,7 +52,7 @@ def create_network_from_logs(pair_list, option=0):
 		for pair in p_network.keys():
 			(s, c) = p_network[pair]
 			if c != 0:
-				p_network[pair] = s/(1.0*c)
+				p_network[pair] = s/c
 			else:
 				p_network[pair] = 0
 
@@ -77,7 +77,7 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 		if p_network[(x, y)] != 0:
 			px = str(p_hash[x])
 			py = str(p_hash[y])
-			int_weight = int(p_network[(x, y)])
+			weight = p_network[(x, y)]
 
 			# only save node which has edges
 			node_x = {}
@@ -96,14 +96,14 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 			edge = {}
 			edge["from"] = x
 			edge["to"] = y
-			if int_weight > 0:
+			if weight > 0:
 				# familiar relation: pos weight
 				edge["color"] = {"color": "green", "highlight": "green"}
 			else:
 				# unfaimilar relation: neg weight
 				edge["color"] = {"color":"red", "highlight": "red"}
 
-			edge["value"] = abs(int_weight)
+			edge["value"] = abs(weight)
 			edge_list.append(edge)
 
 	return (node_list, edge_list)
@@ -115,6 +115,12 @@ def create_visjs_with_whole_process(option=0):
 	p_network = create_network_from_logs(pair_list, option)
 	visjs_network = create_visjs_network_from_raw(p_network, p_hash)
 	return visjs_network
+
+def create_network_with_whole_process(option=0):
+	p_hash = create_p_hash(option)
+	pair_list = create_pair_list(p_hash)
+	p_network = create_network_from_logs(pair_list, option)
+	return p_network
 
 
 if __name__ == "__main__":

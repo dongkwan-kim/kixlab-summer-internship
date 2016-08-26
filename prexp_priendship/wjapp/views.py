@@ -28,6 +28,27 @@ def analyze(request):
 		"exp_name": exp_name
 	})
 
+def export_all_db(request):
+	LWJ = LWJNetwork.objects.all()
+	fep_network = fsla.create_network_with_whole_process()
+	sep_network = ssla.create_network_with_whole_process()
+
+	p_hash = fsla.create_p_hash()
+	pid_hash = dict((y, x) for (x, y) in p_hash.items())
+	output = open("db.csv", "w")
+
+	for obj_lwj in LWJ:
+		pair = [obj_lwj.p1, obj_lwj.p2]
+		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
+		fep_w = fep_network[pid_pair]
+		sep_w = sep_network[pid_pair]
+		
+		line_arr = pair + [str(obj_lwj.weight), str(fep_w), str(sep_w)]
+		line = ",".join(line_arr)
+		output.write(line+"\r\n")
+	output.close()
+	return HttpResponse("success!")
+
 def reg_db(request):
 	# clear db
 	old_LWJ = LWJNetwork.objects.all()
