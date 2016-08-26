@@ -19,4 +19,5 @@ from django.http import HttpResponseRedirect
 
 urlpatterns = [
 	url(r"^$", "wjapp.views.analyze"),
+	url(r"^reg/", "wjapp.views.reg_db"),
 ]

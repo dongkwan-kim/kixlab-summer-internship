@@ -10,18 +10,22 @@
 	height: 400px;
 	border: 1px solid lightgray;
 }
+
 p.collection-header{
 	margin: 0px;
+}
+
+.graph-col {
+	margin-top: 20px;
 }
 </style>
 
 <div class="container">
 	
-	<div style="margin-top: 20px" class="row">
-		<div class="col s6">
+	<div class="row">
+		
+		<div class="graph-col col m4 s12">
 			<div id="fep-network" class="network z-depth-1"></div>
-		</div>
-		<div class="col s6">
 			<div class="collection with-header">
 				<p class="collection-header center">
 					<strong>1st Experiment</strong>
@@ -36,13 +40,9 @@ p.collection-header{
 				<a id="grey-btn" class="grey waves-effect waves-light btn rel-btn"></a>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col s6">
+		<div class="graph-col col m4 s12">
 			<div id="sep-network" class="network z-depth-1"></div>
-		</div>
-		<div class="col s6">
 			<div class="collection with-header">
 				<p class="collection-header center">
 					<strong>2nd Experiment</strong>
@@ -57,6 +57,23 @@ p.collection-header{
 				<a id="grey-btn" class="grey waves-effect waves-light btn rel-btn"></a>
 			</div>
 		</div>
+
+		<div class="graph-col col m4 s12 center">
+			<div class="preloader-wrapper small active">
+				<div class="spinner-layer spinner-green-only">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="gap-patch">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	<div class="row center">
 		<a href="/" class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">home</i></a>
@@ -92,6 +109,13 @@ function draw_network(container_id, raw_nodes, raw_edges, color_option){
 	var network = new vis.Network(container, data, options);
 }
 
+function make_network_square(){
+	$network = $(".network");
+	$network.height($network.width());
+	$(".preloader-wrapper").css("margin-top", $network.height()/2-18);
+}
+
+
 var fep_raw_nodes = {{fep_nodes|safe}};
 var fep_raw_edges = {{fep_edges|safe}};
 
@@ -99,8 +123,13 @@ var sep_raw_nodes = {{sep_nodes|safe}};
 var sep_raw_edges = {{sep_edges|safe}};
 
 $(document).ready(function(){
+	make_network_square();
 	draw_network("fep-network", fep_raw_nodes, fep_raw_edges, "grey-btn");	
 	draw_network("sep-network", sep_raw_nodes, sep_raw_edges, "grey-btn");	
+});
+
+$(window).resize(function(){
+	make_network_square();
 });
 
 $(".rel-btn").click(function(){

@@ -22,5 +22,5 @@ urlpatterns = [
 	url(r"^firstexp/", include("firstexp.urls")),
 	url(r"^secondexp/", include("secondexp.urls")),
 	url(r"^fourthexp/", include("fourthexp.urls")),
-    url(r"^analyze", include("wjapp.urls")),
+    url(r"^analyze/", include("wjapp.urls")),
 ]
