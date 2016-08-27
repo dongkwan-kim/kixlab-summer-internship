@@ -61,17 +61,15 @@ def export_all_db(request, ref):
 	output = open("db_with_"+ref+".csv", "w")
 	
 	if ref == "lwj":
-		LWJ = LWJNetwork.objects.all()
-		for obj_lwj in LWJ:
-			pair = [obj_lwj.p1, obj_lwj.p2]
-			pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
-			fep_w = fep_network[pid_pair]
-			sep_w = sep_network[pid_pair]
+		lwj_network = lwj.create_lwj_network(piv_w_value=1)
+		for lwj_pair in lwj_network.keys():
+			fep_w = fep_network[lwj_pair]
+			sep_w = sep_network[lwj_pair]
+			lwj_w = lwj_network[lwj_pair]
 
-			line_arr = pair + [str(fep_w), str(sep_w), str(obj_lwj.weight)]
+			line_arr = [p_hash[pid] for pid in lwj_pair] + [str(fep_w), str(sep_w), str(lwj_w)]
 			line = ",".join(line_arr)
 			output.write(line+"\r\n")
-		output.close()
 	
 	elif ref == "vote":
 		v_network = vt.create_vote_network(piv_w_value=1)
@@ -83,8 +81,8 @@ def export_all_db(request, ref):
 			line_arr = [p_hash[pid] for pid in v_pair] + [str(fep_w), str(sep_w), str(v_w)]
 			line = ",".join(line_arr)
 			output.write(line+"\r\n")
-		output.close()	
 	
+	output.close()	
 	return HttpResponse("success!")
 
 def reg_network(request, network, deactive=False):
