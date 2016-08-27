@@ -34,11 +34,6 @@ p.collection-header{
 				<p href="#!" class="collection-item">Lorem Ipsum</p>
 				<p href="#!" class="collection-item">Lorem Ipsum</p>
 			</div>	
-			<div id="fep-btn-group" class="center">
-				<a id="green-btn" class="green waves-effect waves-light btn rel-btn"></a>
-				<a id="red-btn" class="red waves-effect waves-light btn rel-btn"></a>
-				<a id="grey-btn" class="grey waves-effect waves-light btn rel-btn"></a>
-			</div>
 		</div>
 
 		<div class="graph-col col m4 s12">
@@ -51,33 +46,39 @@ p.collection-header{
 				<p href="#!" class="collection-item">Lorem Ipsum</p>
 				<p href="#!" class="collection-item">Lorem Ipsum</p>
 			</div>	
-			<div id="sep-btn-group" class="center">
-				<a id="green-btn" class="green waves-effect waves-light btn rel-btn"></a>
-				<a id="red-btn" class="red waves-effect waves-light btn rel-btn"></a>
-				<a id="grey-btn" class="grey waves-effect waves-light btn rel-btn"></a>
-			</div>
 		</div>
 
 		<div class="graph-col col m4 s12 center">
-			<div class="preloader-wrapper small active">
-				<div class="spinner-layer spinner-green-only">
-					<div class="circle-clipper left">
-						<div class="circle"></div>
-					</div>
-					<div class="gap-patch">
-						<div class="circle"></div>
-					</div>
-					<div class="circle-clipper right">
-						<div class="circle"></div>
-					</div>
-				</div>
-			</div>
+			<div id="placeholder-block"></div>
+			<div id="v-network" class="network z-depth-1"></div>
 		</div>
 
 	</div>
 	<div class="row center">
-		<a href="/" class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">home</i></a>
 	</div>
+</div>
+
+<!-- fixed buttons -->
+<div class="fixed-action-btn" style="bottom: 45px; left: 24px;">
+	<a href="/" class="btn-floating btn-large waves-effect waves-light">
+		<i class="material-icons">home</i>
+	</a>
+</div>
+<div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
+	<a class="btn-floating btn-large teal">
+		<i class="large material-icons">timeline</i>
+	</a>
+	<ul>
+		<li>
+			<a id="green-btn" class="green waves-effect waves-light btn btn-floating rel-btn"></a>
+		</li>
+		<li>
+			<a id="red-btn" class="red waves-effect waves-light btn btn-floating rel-btn"></a>
+		</li>
+		<li>
+			<a id="grey-btn" class="grey waves-effect waves-light btn btn-floating rel-btn"></a>
+		</li>
+	</ul>
 </div>
 
 <script>
@@ -112,7 +113,11 @@ function draw_network(container_id, raw_nodes, raw_edges, color_option){
 function make_network_square(){
 	$network = $(".network");
 	$network.height($network.width());
-	$(".preloader-wrapper").css("margin-top", $network.height()/2-18);
+}
+
+function resize_placeholder(){
+	$pb = $("#placeholder-block");
+	$pb.css("margin-top", $(".graph-col:first").height());
 }
 
 
@@ -122,20 +127,26 @@ var fep_raw_edges = {{fep_edges|safe}};
 var sep_raw_nodes = {{sep_nodes|safe}};
 var sep_raw_edges = {{sep_edges|safe}};
 
+var v_raw_nodes = {{v_nodes|safe}};
+var v_raw_edges = {{v_edges|safe}};
+
 $(document).ready(function(){
 	make_network_square();
+	resize_placeholder();
 	draw_network("fep-network", fep_raw_nodes, fep_raw_edges, "grey-btn");	
 	draw_network("sep-network", sep_raw_nodes, sep_raw_edges, "grey-btn");	
+	draw_network("v-network", v_raw_nodes, v_raw_edges, "grey-btn");	
 });
 
 $(window).resize(function(){
 	make_network_square();
+	resize_placeholder();
 });
 
 $(".rel-btn").click(function(){
-	var $id = $(this).parent().attr("id");
 	var $color = $(this).attr("id");
-	draw_network($id.split("-")[0]+"-network", fep_raw_nodes, fep_raw_edges, $color);	
+	draw_network("fep-network", fep_raw_nodes, fep_raw_edges, $color);	
+	draw_network("sep-network", sep_raw_nodes, sep_raw_edges, $color);	
 });
 
 </script>

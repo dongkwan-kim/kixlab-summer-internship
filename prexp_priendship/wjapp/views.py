@@ -13,6 +13,8 @@ exp_name = "Analysis"
 def analyze(request):
 	fep_network = fsla.create_visjs_with_whole_process()
 	sep_network = ssla.create_visjs_with_whole_process()
+	v_network = vt.create_visjs_vote_network()
+	
 	fep_slog_list = fem.SubmitLog.objects.all()
 	sep_slog_list = sem.SubmitLog.objects.all()
 
@@ -25,6 +27,8 @@ def analyze(request):
 		"fep_edges": fep_network[1],
 		"sep_nodes": sep_network[0],
 		"sep_edges": sep_network[1],
+		"v_nodes": v_network[0],
+		"v_edges": v_network[1],
 		"fep_n": len(fep_user_set),
 		"sep_n": len(sep_user_set),
 		"exp_name": exp_name

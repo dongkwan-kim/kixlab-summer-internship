@@ -61,7 +61,6 @@ def create_vote_network(piv_w_value=0.15):
 			vv2 = vv_list[jdx]
 			pid_pair = tuple(sorted([pid_hash[vv1.name], pid_hash[vv2.name]]))
 			v_network[pid_pair] = 1/(1+get_eud(vv1.vote, vv2.vote))
-	
 	rv_network = {}
 	v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
 	for k, v in v_network.items():
