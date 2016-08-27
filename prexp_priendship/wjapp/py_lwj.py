@@ -1,7 +1,7 @@
 import firstexp.py_submit_log_analyzer as fsla
 from wjapp.models import LWJNetwork
 
-def create_lwj_network():
+def create_lwj_network(piv_w_value=0.15):
 	"""
 	:return: dict {(pid_x, pid_y): "weight"}
 	"""
@@ -9,13 +9,19 @@ def create_lwj_network():
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
 	LWJ = LWJNetwork.objects.all()
 	
-	p_network = {}
+	lwj_network = {}
 	for obj_lwj in LWJ:
 		pair = [obj_lwj.p1, obj_lwj.p2]
 		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
-		p_network[pid_pair] = obj_lwj.weight
+		lwj_network[pid_pair] = obj_lwj.weight
 	
-	return p_network
+	rlwj_network = {}
+	v_piv_ascend = get_piv(lwj_network.values(), piv_w_value, option="ascend")
+	for k, v in lwj_network.items():
+		if v > v_piv_ascend:
+			rlwj_network[k] = v
+
+	return rlwj_network
 
 def create_visjs_network_from_raw(p_network, p_hash):
 	"""
@@ -59,4 +65,17 @@ def create_visjs_network_from_raw(p_network, p_hash):
 def create_visjs_lwj_network():
 	lwj_network = create_lwj_network()
 	p_hash = fsla.create_p_hash()
-	return create_visjs_network_from_raw(v_network, p_hash)
+	return create_visjs_network_from_raw(lwj_network, p_hash)
+
+def get_piv(l, c, option="ascend"):
+	if option == "ascend":
+		sl = list(reversed(sorted([x for x in l])))
+	else:
+		sl = list(sorted([x for x in l]))
+	length = len(l)
+
+	if c != 1:
+		pidx = int(c*length)
+		return sl[pidx]
+	else:
+		return sl[-1] - 1

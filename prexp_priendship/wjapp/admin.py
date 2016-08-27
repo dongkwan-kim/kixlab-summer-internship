@@ -4,8 +4,7 @@ from wjapp.models import LWJNetwork, Vote19, VoteVector
 
 
 class LWJNetworkAdmin(admin.ModelAdmin):
-	list_display = ("p1", "p2", "weight", "do_i_have")
-	list_filter = ("do_i_have",)
+	list_display = ("p1", "p2", "weight")
 
 class Vote19Admin(admin.ModelAdmin):
 	list_display = ("name", "party")
