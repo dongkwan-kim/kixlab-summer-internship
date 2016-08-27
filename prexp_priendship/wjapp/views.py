@@ -8,7 +8,7 @@ from wjapp.models import LWJNetwork
 import wjapp.py_vote_19 as vt
 # Create your views here.
 
-exp_name = "with Prof. Lee wonjae"
+exp_name = "Analysis"
 
 def analyze(request):
 	fep_network = fsla.create_visjs_with_whole_process()
@@ -38,7 +38,7 @@ def vote_manipulate(request, option):
 		vt.int_vectorize()
 	elif option == "vis":
 		v_network = vt.create_visjs_vote_network()
-		return render(request, "wjapp/votevis.html", {"nodes": v_network[0], "edges": v_network[1], "exp_name": exp_name})
+		return render(request, "wjapp/votevis.html", {"nodes": v_network[0], "edges": v_network[1], "exp_name": "Vote Network of 19th Assembly"})
 	else:
 		return HttpResponse("check the wjapp/views.py")
 
@@ -55,7 +55,7 @@ def export_all_db(request):
 	LWJ = LWJNetwork.objects.all()
 	fep_network = fsla.create_network_with_whole_process()
 	sep_network = ssla.create_network_with_whole_process()
-
+	
 	p_hash = fsla.create_p_hash()
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
 

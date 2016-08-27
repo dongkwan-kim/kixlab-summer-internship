@@ -103,14 +103,7 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 			edge = {}
 			edge["from"] = x
 			edge["to"] = y
-		
-			if weight > 0:
-				# familiar relation: pos weight
-				edge["color"] = {"color": "green", "highlight": "green"}
-			else:
-				# unfaimilar relation: neg weight
-				edge["color"] = {"color":"red", "highlight": "red"}	
-			
+			edge["color"] = {"color": "grey", "highlight": "green"}
 			edge["value"] = abs(weight)
 			edge_list.append(edge)
 
