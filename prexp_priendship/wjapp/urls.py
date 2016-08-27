@@ -21,4 +21,5 @@ urlpatterns = [
 	url(r"^$", "wjapp.views.analyze"),
 	url(r"^reg/", "wjapp.views.reg_db"),
 	url(r"^export/", "wjapp.views.export_all_db"),
+	url(r"^vm/([\w \[\]\.]+)/", "wjapp.views.vote_manipulate"),
 ]

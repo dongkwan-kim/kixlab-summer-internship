@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import firstexp.models as fem
-import secondexp.models as sem
-from wjapp.models import LWJNetwork
 import firstexp.py_submit_log_analyzer as fsla
+import secondexp.models as sem
 import secondexp.py_submit_log_analyzer as ssla
+from wjapp.models import LWJNetwork
+import wjapp.py_vote_19 as vt
 # Create your views here.
 
 exp_name = "with Prof. Lee wonjae"
@@ -28,7 +29,25 @@ def analyze(request):
 		"exp_name": exp_name
 	})
 
+def vote_manipulate(request, option):
+	if option == "crawl":
+		return HttpResponse("Blocked, Check the wjapp/views.py")
+		vt.crawl(293)
+		return HttpResponse("Success: "+option)
+	elif option == "vectorize":
+		vt.int_vectorize()
+		return HttpResponse("Success: "+option)
+	else:
+		return HttpResponse("check the wjapp/views.py")
+
 def export_all_db(request):
+	"""
+	:output: .csv file
+	
+	p1, p2, w_lwj, w_fep, w_sep
+	.., .., ....., ....., .....
+	"""
+	
 	LWJ = LWJNetwork.objects.all()
 	fep_network = fsla.create_network_with_whole_process()
 	sep_network = ssla.create_network_with_whole_process()
@@ -81,4 +100,5 @@ def reg_db(request):
 					LWJ.save()
 		row_idx += 1
 	return HttpResponse("success!")
+
 
