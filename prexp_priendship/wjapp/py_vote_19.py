@@ -45,7 +45,7 @@ def get_eud(vv1, vv2):
 	eud = math.sqrt(sum([(e1 - e2)**2 for (e1, e2) in zip(vv1_list, vv2_list)]))
 	return eud
 
-def create_vote_network():
+def create_vote_network(piv_w_value=0.15):
 	"""
 	:return: dict {(pid_x, pid_y): "weight"}
 	"""
@@ -63,7 +63,7 @@ def create_vote_network():
 			v_network[pid_pair] = 1/(1+get_eud(vv1.vote, vv2.vote))
 	
 	rv_network = {}
-	v_piv_ascend = get_piv(v_network.values(), 0.15, option="ascend")
+	v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
 	for k, v in v_network.items():
 		if v > v_piv_ascend:
 			rv_network[k] = v
@@ -132,8 +132,12 @@ def get_piv(l, c, option="ascend"):
 	else:
 		sl = list(sorted([x for x in l]))
 	length = len(l)
-	pidx = int(c*length)
-	return sl[pidx]
+
+	if c != 1:
+		pidx = int(c*length)
+		return sl[pidx]
+	else:
+		return sl[-1] - 1
 
 # max num = 293
 def crawl(num):

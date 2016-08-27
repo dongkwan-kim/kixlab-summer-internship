@@ -44,32 +44,44 @@ def vote_manipulate(request, option):
 
 	return HttpResponse("Success: "+option)
 
-def export_all_db(request):
+def export_all_db(request, ref):
 	"""
 	:output: .csv file
 	
-	p1, p2, w_fep, w_sep, w_lwj, w_vot
-	.., .., ....., ....., ....., .....
+	p1, p2, w_fep, w_sep, w_[ref]
+	.., .., ....., ....., .......,
 	"""
-	
-	LWJ = LWJNetwork.objects.all()
 	fep_network = fsla.create_network_with_whole_process()
 	sep_network = ssla.create_network_with_whole_process()
-	
 	p_hash = fsla.create_p_hash()
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
+	output = open("db_with_"+ref+".csv", "w")
+	
+	if ref == "lwj":
+		LWJ = LWJNetwork.objects.all()
+		for obj_lwj in LWJ:
+			pair = [obj_lwj.p1, obj_lwj.p2]
+			pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
+			fep_w = fep_network[pid_pair]
+			sep_w = sep_network[pid_pair]
 
-	output = open("db.csv", "w")
-	for obj_lwj in LWJ:
-		pair = [obj_lwj.p1, obj_lwj.p2]
-		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
-		fep_w = fep_network[pid_pair]
-		sep_w = sep_network[pid_pair]
-		
-		line_arr = pair + [str(fep_w), str(sep_w), str(obj_lwj.weight)]
-		line = ",".join(line_arr)
-		output.write(line+"\r\n")
-	output.close()
+			line_arr = pair + [str(fep_w), str(sep_w), str(obj_lwj.weight)]
+			line = ",".join(line_arr)
+			output.write(line+"\r\n")
+		output.close()
+	
+	elif ref == "vote":
+		v_network = vt.create_vote_network(piv_w_value=1)
+		for v_pair in v_network.keys():
+			fep_w = fep_network[v_pair]
+			sep_w = sep_network[v_pair]
+			v_w = v_network[v_pair]
+
+			line_arr = [p_hash[pid] for pid in v_pair] + [str(fep_w), str(sep_w), str(v_w)]
+			line = ",".join(line_arr)
+			output.write(line+"\r\n")
+		output.close()	
+	
 	return HttpResponse("success!")
 
 def reg_db(request, deactive=True):
