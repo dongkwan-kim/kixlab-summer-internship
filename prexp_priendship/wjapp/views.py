@@ -18,6 +18,7 @@ def analyze(request):
 
 	fep_user_set = set([u.token for u in fep_slog_list])
 	sep_user_set = set([u.token for u in sep_slog_list])
+	
 	return render(request, "wjapp/analyze.html",
 	{
 		"fep_nodes": fep_network[0],
@@ -33,19 +34,22 @@ def vote_manipulate(request, option):
 	if option == "crawl":
 		return HttpResponse("Blocked, Check the wjapp/views.py")
 		vt.crawl(293)
-		return HttpResponse("Success: "+option)
 	elif option == "vectorize":
 		vt.int_vectorize()
-		return HttpResponse("Success: "+option)
+	elif option == "vis":
+		v_network = vt.create_visjs_vote_network()
+		return render(request, "wjapp/votevis.html", {"nodes": v_network[0], "edges": v_network[1], "exp_name": exp_name})
 	else:
 		return HttpResponse("check the wjapp/views.py")
+
+	return HttpResponse("Success: "+option)
 
 def export_all_db(request):
 	"""
 	:output: .csv file
 	
-	p1, p2, w_lwj, w_fep, w_sep
-	.., .., ....., ....., .....
+	p1, p2, w_fep, w_sep, w_lwj, w_vot
+	.., .., ....., ....., ....., .....
 	"""
 	
 	LWJ = LWJNetwork.objects.all()
@@ -54,21 +58,24 @@ def export_all_db(request):
 
 	p_hash = fsla.create_p_hash()
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
-	output = open("db.csv", "w")
 
+	output = open("db.csv", "w")
 	for obj_lwj in LWJ:
 		pair = [obj_lwj.p1, obj_lwj.p2]
 		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
 		fep_w = fep_network[pid_pair]
 		sep_w = sep_network[pid_pair]
 		
-		line_arr = pair + [str(obj_lwj.weight), str(fep_w), str(sep_w)]
+		line_arr = pair + [str(fep_w), str(sep_w), str(obj_lwj.weight)]
 		line = ",".join(line_arr)
 		output.write(line+"\r\n")
 	output.close()
 	return HttpResponse("success!")
 
-def reg_db(request):
+def reg_db(request, deactive=True):
+	if deactive:
+		return HttpResponse("Deactived, check the wjapp.views.py")
+
 	# clear db
 	old_LWJ = LWJNetwork.objects.all()
 	for olwj in old_LWJ:
@@ -100,5 +107,3 @@ def reg_db(request):
 					LWJ.save()
 		row_idx += 1
 	return HttpResponse("success!")
-
-
