@@ -4,7 +4,8 @@ import firstexp.models as fem
 import firstexp.py_submit_log_analyzer as fsla
 import secondexp.models as sem
 import secondexp.py_submit_log_analyzer as ssla
-from wjapp.models import LWJNetwork
+from wjapp.models import LWJNetwork, VoteNetwork
+from wjapp.models import Vote19, VoteVector
 import wjapp.py_vote_19 as vt
 import wjapp.py_lwj as lwj
 # Create your views here.
@@ -86,18 +87,18 @@ def export_all_db(request, ref):
 	
 	return HttpResponse("success!")
 
-def reg_db(request, db, deactive=False):
+def reg_network(request, network, deactive=False):
 	if deactive:
 		return HttpResponse("Deactived, check the wjapp.views.py")
-
-	if db == "lwj":
+	
+	my_pobj_list = fem.Politician.objects.all()
+	my_p_list = [p.name for p in my_pobj_list]
+	
+	if network == "lwj":
 		old_LWJ = LWJNetwork.objects.all()
 		for olwj in old_LWJ:
 			olwj.delete()
-	
-		my_pobj_list = fem.Politician.objects.all()
-		my_p_list = [p.name for p in my_pobj_list]
-	
+
 		row_idx = 0
 		for line in open("all.csv", "r"):
 			if row_idx == 0:
@@ -117,25 +118,36 @@ def reg_db(request, db, deactive=False):
 						_do_i_have = False
 				
 					if _do_i_have:
-						LWJ = LWJNetwork(p1=_p1, p2=_p2, weight=_weight, do_i_have=_do_i_have)
+						LWJ = LWJNetwork(p1=_p1, p2=_p2, weight=_weight)
 						LWJ.save()
 			row_idx += 1
 
-	elif db == "vote":
-		pass
+	elif network == "vote":
+		old_vote = VoteNetwork.objects.all()
+		for ovote in old_vote:
+			ovote.delete()
+
+		vv_list = VoteVector.objects.all()
+		p_hash = fsla.create_p_hash()
+		
+		vvlen = len(vv_list)
+		for idx in range(vvlen):
+			for jdx in range(idx+1, vvlen):
+				vv1 = vv_list[idx]
+				vv2 = vv_list[jdx]
+				p_pair = sorted([vv1.name, vv2.name])
+				weight = 1/(1+vt.get_eud(vv1.vote, vv2.vote))
+				Vote = VoteNetwork(p1=p_pair[0], p2=p_pair[1], weight=weight)
+				Vote.save()		
+
 	elif db == "cobill":
 		pass
+
 	return HttpResponse("success!")
 
-
-def vote_manipulate(request, option):
-	if option == "crawl":
-		return HttpResponse("Blocked, Check the wjapp/views.py")
+def reg_db(request, db):
+	if db == "vote":
+		return HttpResponse("Blocked, check wjapp.views")
 		vt.crawl(293)
-	elif option == "vectorize":
-		vt.int_vectorize()
-	else:
-		return HttpResponse("check the wjapp/views.py")
-
-	return HttpResponse("Success: "+option)
-
+	
+	return HttpResponse("success!")

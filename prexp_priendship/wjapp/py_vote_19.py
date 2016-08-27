@@ -1,12 +1,16 @@
 import urllib.request
 import urllib.parse
 import json
-from wjapp.models import Vote19, VoteVector
+from wjapp.models import Vote19, VoteVector, VoteNetwork
 import firstexp.models as fem
 import firstexp.py_submit_log_analyzer as fsla
 import math
 
+
 def int_vectorize():
+	"""
+	Vote19 to VoteVector
+	"""
 	vote_db = Vote19.objects.all()
 	my_p_list = fem.Politician.objects.all()
 	
@@ -49,18 +53,18 @@ def create_vote_network(piv_w_value=0.15):
 	"""
 	:return: dict {(pid_x, pid_y): "weight"}
 	"""
-	vv_list = VoteVector.objects.all()
+	#vv_list = VoteVector.objects.all()
+	
 	p_hash = fsla.create_p_hash()
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
-	
+	Vote = VoteNetwork.objects.all()
+
 	v_network = {}
-	vvlen = len(vv_list)
-	for idx in range(vvlen):
-		for jdx in range(idx+1, vvlen):
-			vv1 = vv_list[idx]
-			vv2 = vv_list[jdx]
-			pid_pair = tuple(sorted([pid_hash[vv1.name], pid_hash[vv2.name]]))
-			v_network[pid_pair] = 1/(1+get_eud(vv1.vote, vv2.vote))
+	for obj_vote in Vote:
+		pair = [obj_vote.p1, obj_vote.p2]
+		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
+		v_network[pid_pair] = obj_vote.weight	
+	
 	rv_network = {}
 	v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
 	for k, v in v_network.items():
@@ -113,18 +117,6 @@ def create_visjs_vote_network():
 	p_hash = fsla.create_p_hash()
 	return create_visjs_network_from_raw(v_network, p_hash)
 
-def get_avg(l):
-	return sum(l)/len(l)
-
-def get_med(l):
-	sl = sorted([x for x in l])
-	length = len(l)
-	midx = int(length/2)
-	if length%2 == 1:
-		return sl[midx]
-	else:
-		return get_avg([sl[midx-1], sl[midx]])
-
 def get_piv(l, c, option="ascend"):
 	if option == "ascend":
 		sl = list(reversed(sorted([x for x in l])))
@@ -138,8 +130,11 @@ def get_piv(l, c, option="ascend"):
 	else:
 		return sl[-1] - 1
 
-# max num = 293
 def crawl(num):
+	"""
+	:param num: num of congressman, max=293
+	:crawl vote result of 19th assembly
+	"""
 	vote_db = Vote19.objects.all()
 	
 	# start from previous index
