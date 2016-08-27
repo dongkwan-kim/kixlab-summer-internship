@@ -5,9 +5,10 @@ import firstexp.py_submit_log_analyzer as fsla
 import secondexp.models as sem
 import secondexp.py_submit_log_analyzer as ssla
 from wjapp.models import LWJNetwork, VoteNetwork
-from wjapp.models import Vote19, VoteVector
+from wjapp.models import Vote19, VoteVector, CoBill20
 import wjapp.py_vote_19 as vt
 import wjapp.py_lwj as lwj
+import wjapp.py_cobill as cb
 # Create your views here.
 
 exp_name = "Analysis"
@@ -144,8 +145,12 @@ def reg_network(request, network, deactive=False):
 	return HttpResponse("success!")
 
 def reg_db(request, db):
+	
 	if db == "vote":
 		return HttpResponse("Blocked, check wjapp.views")
 		vt.crawl(293)
 	
+	elif db == "cobill":
+		cb.crawl_bill(2001744)
+
 	return HttpResponse("success!")

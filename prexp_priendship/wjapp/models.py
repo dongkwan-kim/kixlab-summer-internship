@@ -22,6 +22,10 @@ class VoteNetwork(models.Model):
 	p2 = models.CharField(max_length=5)
 	weight = models.FloatField()
 
+class CoBill20(models.Model):
+	bill_no = models.IntegerField()
+	p_list = models.TextField()
+
 class CoBillNetwork(models.Model):
 	p1 = models.CharField(max_length=5)
 	p2 = models.CharField(max_length=5)
