@@ -9,6 +9,7 @@ from wjapp.models import Vote19, VoteVector, CoBill20
 import wjapp.py_vote_19 as vt
 import wjapp.py_lwj as lwj
 import wjapp.py_cobill as cb
+import wjapp.py_stat as stat
 
 from ast import literal_eval 
 # Create your views here.
@@ -28,6 +29,8 @@ def analyze(request):
 	fep_user_set = set([u.token for u in fep_slog_list])
 	sep_user_set = set([u.token for u in sep_slog_list])
 	
+	w_hash = stat.get_w_list_hash()
+
 	return render(request, "wjapp/analyze.html",
 	{
 		"fep_nodes": fep_network[0],
@@ -42,6 +45,7 @@ def analyze(request):
 		"cb_edges": cb_network[1],
 		"fep_n": len(fep_user_set),
 		"sep_n": len(sep_user_set),
+		"w_hash": w_hash,
 		"exp_name": exp_name
 	})
 

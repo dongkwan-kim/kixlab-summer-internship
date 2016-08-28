@@ -5,9 +5,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css" />
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css" rel="stylesheet" type="text/css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <style type="text/css">
 .network {
@@ -29,6 +28,7 @@ p.collection-header{
 .graph-col {
 	margin-top: 20px;
 }
+
 </style>
 
 <div class="container">
@@ -68,17 +68,17 @@ p.collection-header{
 	<div class="row">
 		
 		<div class="col m4 s12">
-			<svg id="fep-1-graph" class="graph z-depth-1"></svg>
+			<div id="fep-v-graph" class="graph z-depth-1"></div>
 		</div>
 	
 		<div class="col m4 s12">
-			<svg id="sep-1-graph" class="graph z-depth-1"></svg>
+			<div id="sep-v-graph" class="graph z-depth-1"></div>
 		</div>
 
 		<div class="col m4 s12">
 			<div class="tooltipped" data-position="top" data-delay="50"
 				data-tooltip="19th Assembly Vote Result">
-				<div id="v-network" class="network z-depth-1"></div>
+				<div id="v-network" class="ref-network network z-depth-1"></div>
 			</div>
 		</div>
 
@@ -87,17 +87,17 @@ p.collection-header{
 	<div class="row">
 		
 		<div class="col m4 s12">
-			<svg id="fep-2-graph" class="graph z-depth-1"></svg>
+			<div id="fep-lwj-graph" class="graph z-depth-1"></div>
 		</div>
 	
 		<div class="col m4 s12">
-			<svg id="sep-2-graph" class="graph z-depth-1"></svg>
+			<div id="sep-lwj-graph" class="graph z-depth-1"></div>
 		</div>
 
 		<div class="col m4 s12">
 			<div class="tooltipped" data-position="top" data-delay="50"
 				data-tooltip="20th Assembly's features (By Prof Lee)">
-				<div id="lwj-network" class="network z-depth-1"></div>
+				<div id="lwj-network" class="ref-network network z-depth-1"></div>
 			</div>
 		</div>
 
@@ -106,17 +106,17 @@ p.collection-header{
 	<div class="row">
 		
 		<div class="col m4 s12">
-			<svg id="fep-3-graph" class="graph z-depth-1"></svg>
+			<div id="fep-cb-graph" class="graph z-depth-1"></div>
 		</div>
 	
 		<div class="col m4 s12">
-			<svg id="sep-3-graph" class="graph z-depth-1"></svg>
+			<div id="sep-cb-graph" class="graph z-depth-1"></div>
 		</div>
 
 		<div class="col m4 s12">
 			<div class="tooltipped" data-position="top" data-delay="50"
 				data-tooltip="20th Assembly Cosponsorship">
-				<div id="cb-network" class="network z-depth-1"></div>
+				<div id="cb-network" class="ref-network network z-depth-1"></div>
 			</div>
 		<div>
 
@@ -147,6 +147,8 @@ p.collection-header{
 		</li>
 	</ul>
 </div>
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto"></div>
 
 <script>
 
@@ -180,6 +182,16 @@ function draw_network(container_id, raw_nodes, raw_edges, color_option){
 	});
 	return network;
 }
+
+function draw_all_network(){
+	$network = $(".network");
+	$network.map(function(){
+		$nid = $(this).attr("id");
+		var nobj = draw_network($nid, n_list[$nid]["nodes"], n_list[$nid]["edges"], "grey-btn");
+		nobj_list[$nid] = nobj;
+	});
+}
+
 
 function make_square(){
 	var width = $(".network").width()
@@ -229,6 +241,100 @@ function is_node_exist(netw_id, node_id){
 	return false;
 }
 
+function draw_graph(gid, x_arr, y_arr){
+	x_arr = standardize(x_arr);
+	y_arr = standardize(y_arr);
+	data = [];
+	for(var idx = 0; idx < x_arr.length; idx++){
+		data.push([x_arr[idx], y_arr[idx]]);
+	}
+	console.log(data);	
+	$("#"+gid).highcharts({
+        chart: {
+            type: 'scatter',
+            zoomType: 'xy'
+        },
+		title: {
+			text: null
+		},
+        xAxis: {
+            title: {
+                enabled: false,
+            },
+            startOnTick: true,
+            endOnTick: true,
+            showLastLabel: true
+        },
+        yAxis: {
+            title: {
+            	enabled: false
+			}
+        },
+        legend: {
+			enabled: false
+		},
+		exporting: {
+			buttons: {
+				contextButton: {
+					enabled: false
+				}
+			}
+		},
+		plotOptions: {
+            scatter: {
+                marker: {
+                    radius: 3,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineColor: 'rgb(100,100,100)'
+                        }
+                    }
+                },
+                states: {
+                    hover: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x} cm, {point.y} kg'
+                }
+            }
+        },
+		series: [{
+			color: 'rgba(223, 83, 83, .5)',
+			data: data,
+		}]
+	});
+}
+
+function draw_all_graph(){
+	$graph = $(".graph");
+	$graph.map(function(){
+		$gid = $(this).attr("id");
+		var exp_id = $gid.split("-")[0];
+		var ref_id = $gid.split("-")[1];
+		
+		var xy_arr = w_hash[exp_id][ref_id];
+		var x_arr = xy_arr[0];
+		var y_arr = xy_arr[1];
+		
+		draw_graph($gid, x_arr, y_arr);	
+	});
+	remove_hc_label();
+}
+
+function remove_hc_label(){
+	$("text").map(function(){
+		if($(this).text() == "Highcharts.com"){
+			$(this).css("display", "none");
+		}
+	});
+}
+
 var fep_raw_nodes = {{fep_nodes|safe}};
 var fep_raw_edges = {{fep_edges|safe}};
 var sep_raw_nodes = {{sep_nodes|safe}};
@@ -249,16 +355,14 @@ var n_list = {
 }
 var nobj_list = {}
 
+var w_hash = {{w_hash|safe}}
+
 $(document).ready(function(){
+	console.log(w_hash);
 	make_square();
 	resize_placeholder();
-	$network = $(".network");
-	$network.map(function(){
-		$nid = $(this).attr("id");
-		var nobj = draw_network($nid, n_list[$nid]["nodes"], n_list[$nid]["edges"], "grey-btn");
-		nobj_list[$nid] = nobj;
-	});
-	console.log(fep_raw_edges)
+	//draw_all_network();	
+	draw_all_graph();	
 });
 
 $(window).resize(function(){
@@ -273,7 +377,7 @@ $(".rel-btn").click(function(){
 	nobj_list["fep-network"] = new_fep_network;
 	nobj_list["sep-network"] = new_sep_network;
 });
-
 </script>
 
+<script src="{% static "js/stat.js" %}"></script>
 {% endblock %}
