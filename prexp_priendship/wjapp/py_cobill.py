@@ -24,10 +24,14 @@ def crawl_bill(bill_no):
 			p_list = []			
 			for p_line in line_arr:
 				# p_line = "kname(party/cname)"
-				# token = "kname(party"
-				token = p_line.split("/")[0]
-				[n, p] = token.split("(")
-				p_list.append(n+"_"+p[0])
+				name = p_line.split("(")[0]
+				if name in ["김성태", "최경환"]:
+					cname = p_line.split("/")[1][:-1]
+					p_list.append(name+"_"+cname)
+					print(p_list[-1])
+				else:
+					p_list.append(name)
+
 			cb_20 = CoBill20(bill_no=bill_no, p_list=p_list)
 			cb_20.save()
 			break
@@ -37,6 +41,12 @@ def crawl_all_bill():
 	start_no = old_cb[len(old_cb)-1].bill_no+1
 	for no in range(start_no, 2001745):
 		crawl_bill(no)
+
+def del_db():
+	old_cb = CoBill20.objects.all()
+	for ocb in old_cb:
+		ocb.delete()
+
 # test
 if __name__ == "__main__":
 	crawl_bill(2000159)

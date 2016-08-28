@@ -56,7 +56,7 @@ def create_visjs_network_from_raw(p_network, p_hash):
 			edge = {}
 			edge["from"] = x
 			edge["to"] = y
-			edge["color"] = {"color": "grey", "highlight": "green"}
+			edge["color"] = {"color": "grey", "highlight": "orange"}
 			edge["value"] = abs(weight)
 			edge_list.append(edge)
 

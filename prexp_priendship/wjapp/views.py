@@ -141,17 +141,39 @@ def reg_network(request, network, deactive=False):
 				Vote = VoteNetwork(p1=p_pair[0], p2=p_pair[1], weight=weight)
 				Vote.save()		
 
-	elif db == "cobill":
+	elif network == "cobill":
 		old_cb = CoBillNetwork.objects.all()
 		for ocb in old_cb:
 			ocb.delete()
-
+		
+		pair_list = get_set_of_pair(my_p_list)
+		cb_network = dict([(x, 0) for x in pair_list])
 		cb20_list = CoBill20.objects.all()
 		for cb20 in cb20_list:
 			p_list = literal_eval(cb20.p_list)
-			print(p_list)
-			break
+			intersection_list = []
+			for p in p_list:
+				p_name = p.split("_")[0]
+				if p_name in my_p_list:
+					if p_name in ["김성태", "최경환"]:
+						if p.split("_")[1] in ["金聖泰", "崔炅煥"]:
+							intersection_list.append(p_name)
+					else:
+						intersection_list.append(p_name)
+
+			i_pair_list = get_set_of_pair(intersection_list)
+			for p_tuple in i_pair_list:
+				cb_network[p_tuple] += 1
+
+		for ((p1, p2), weight) in cb_network.items():
+			if weight > 0:
+				cobill = CoBillNetwork(p1=p1, p2=p2, weight=weight)
+				cobill.save()
+	
 	return HttpResponse("success!")
+
+def get_set_of_pair(l):
+	return set([tuple(sorted([x, y])) for x in l for y in l if x != y])
 
 def reg_db(request, db):
 	"""
