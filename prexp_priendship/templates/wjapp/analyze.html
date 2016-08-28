@@ -110,6 +110,10 @@ function draw_network(container_id, raw_nodes, raw_edges, color_option){
 	};
 	var options = {};
 	var network = new vis.Network(container, data, options);
+	network.on("selectNode", function(params){
+		focus_on_node_of_all(params["nodes"]);
+	});
+	return network;
 }
 
 function make_network_square(){
@@ -123,26 +127,72 @@ function resize_placeholder(){
 }
 
 
+function focus_on_node(network, node_id){
+	var options = {
+		scale: 1,
+		offset: {x:0,y:0},
+		animation: {
+			duration: 500,
+			easingFunction: "easeInOutQuad"
+		}
+	};
+
+	network.focus(node_id, options);
+	network.selectNodes([node_id]);
+}
+
+function focus_on_node_of_all(node_id){
+	$network = $(".network");
+	var nid_list = $network.map(function(){
+		$nid =  $(this).attr("id");
+		if(is_node_exist($nid, node_id)){
+			focus_on_node(nobj_list[$nid], node_id);
+		} else {
+			nobj_list[$nid].fit();
+			nobj_list[$nid].unselectAll();
+		}
+	});
+}
+
+function is_node_exist(netw_id, node_id){
+	nodes = n_list[netw_id]["nodes"];
+	for(var idx = 0; idx < nodes.length; idx++){
+		if(nodes[idx]["id"] == node_id){
+			return true;
+		}
+	}
+	return false;
+}
+
 var fep_raw_nodes = {{fep_nodes|safe}};
 var fep_raw_edges = {{fep_edges|safe}};
-
 var sep_raw_nodes = {{sep_nodes|safe}};
 var sep_raw_edges = {{sep_edges|safe}};
-
 var v_raw_nodes = {{v_nodes|safe}};
 var v_raw_edges = {{v_edges|safe}};
-
 var lwj_raw_nodes = {{lwj_nodes|safe}};
 var lwj_raw_edges = {{lwj_edges|safe}};
+
+var n_list = {
+	"fep-network": {"nodes": fep_raw_nodes, "edges": fep_raw_edges},
+	"sep-network": {"nodes": sep_raw_nodes, "edges": sep_raw_edges},
+	"v-network": {"nodes": v_raw_nodes, "edges": v_raw_edges},
+	"lwj-network": {"nodes": lwj_raw_nodes, "edges": lwj_raw_edges},
+}
+var nobj_list = {}
 
 $(document).ready(function(){
 	make_network_square();
 	resize_placeholder();
-	draw_network("fep-network", fep_raw_nodes, fep_raw_edges, "grey-btn");	
-	draw_network("sep-network", sep_raw_nodes, sep_raw_edges, "grey-btn");	
-	draw_network("v-network", v_raw_nodes, v_raw_edges, "grey-btn");	
-	draw_network("lwj-network", lwj_raw_nodes, lwj_raw_edges, "grey-btn");	
+	$network = $(".network");
+	$network.map(function(){
+		$nid = $(this).attr("id");
+		var nobj = draw_network($nid, n_list[$nid]["nodes"], n_list[$nid]["edges"], "grey-btn");
+		nobj_list[$nid] = nobj;
+	});
+
 });
+
 
 $(window).resize(function(){
 	make_network_square();
