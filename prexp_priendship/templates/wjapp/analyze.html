@@ -49,14 +49,20 @@ p.collection-header{
 		</div>
 
 		<div class="graph-col col m4 s12 center">
+			
 			<div id="placeholder-block"></div>
-			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="By 19th assembly vote result">
+			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="19th Assembly Vote Result">
 				<div id="v-network" class="network z-depth-1"></div>
 			</div>
 			<br>
-			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="By 20th assembly's 13 features(Prof. Lee's work)">
+			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="20th Assembly's features (By Prof Lee)">
 				<div id="lwj-network" class="network z-depth-1"></div>
 			</div>
+			<br>
+			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="20th Assembly Cosponsorship">
+				<div id="cb-network" class="network z-depth-1"></div>
+			</div>
+
 		</div>
 
 	</div>
@@ -176,12 +182,15 @@ var v_raw_nodes = {{v_nodes|safe}};
 var v_raw_edges = {{v_edges|safe}};
 var lwj_raw_nodes = {{lwj_nodes|safe}};
 var lwj_raw_edges = {{lwj_edges|safe}};
+var cb_raw_nodes = {{cb_nodes|safe}};
+var cb_raw_edges = {{cb_edges|safe}};
 
 var n_list = {
 	"fep-network": {"nodes": fep_raw_nodes, "edges": fep_raw_edges},
 	"sep-network": {"nodes": sep_raw_nodes, "edges": sep_raw_edges},
 	"v-network": {"nodes": v_raw_nodes, "edges": v_raw_edges},
 	"lwj-network": {"nodes": lwj_raw_nodes, "edges": lwj_raw_edges},
+	"cb-network": {"nodes": cb_raw_nodes, "edges": cb_raw_edges},
 }
 var nobj_list = {}
 

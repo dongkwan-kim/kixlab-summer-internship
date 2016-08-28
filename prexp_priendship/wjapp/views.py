@@ -20,7 +20,8 @@ def analyze(request):
 	sep_network = ssla.create_visjs_with_whole_process()
 	v_network = vt.create_visjs_vote_network()
 	lwj_network = lwj.create_visjs_lwj_network()
-	
+	cb_network = cb.create_visjs_cb_network()
+
 	fep_slog_list = fem.SubmitLog.objects.all()
 	sep_slog_list = sem.SubmitLog.objects.all()
 
@@ -37,6 +38,8 @@ def analyze(request):
 		"v_edges": v_network[1],
 		"lwj_nodes": lwj_network[0],
 		"lwj_edges": lwj_network[1],
+		"cb_nodes": cb_network[0],
+		"cb_edges": cb_network[1],
 		"fep_n": len(fep_user_set),
 		"sep_n": len(sep_user_set),
 		"exp_name": exp_name
@@ -50,7 +53,7 @@ def ref_visualize(request, name):
 
 	elif name == "lwj":
 		lwj_network = lwj.create_visjs_lwj_network()
-		return render(request, "wjapp/resultvis.html", {"nodes": lwj_network[0], "edges": lwj_network[1], "exp_name": "Network of 19th Assembly's features (By Prof Lee)"})
+		return render(request, "wjapp/resultvis.html", {"nodes": lwj_network[0], "edges": lwj_network[1], "exp_name": "Network of 20th Assembly's features (By Prof Lee)"})
 
 	elif name == "cobill":
 		cb_network = cb.create_visjs_cb_network()
