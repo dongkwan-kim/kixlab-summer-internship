@@ -22,6 +22,5 @@ urlpatterns = [
 	url(r"^reg/network/([\w \[\]\.]+)/", "wjapp.views.reg_network"),
 	url(r"^reg/db/([\w \[\]\.]+)/", "wjapp.views.reg_db"),
 	url(r"^export/([\w \[\]\.]+)/", "wjapp.views.export_all_db"),
-	url(r"lwj/vis/", "wjapp.views.lwj_visualize"),
-	url(r"vote/vis/", "wjapp.views.vote_visualize"),
+	url(r"vis/([\w \[\]\.]+)/", "wjapp.views.ref_visualize"),
 ]

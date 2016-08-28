@@ -42,13 +42,20 @@ def analyze(request):
 		"exp_name": exp_name
 	})
 
-def vote_visualize(request):
-	v_network = vt.create_visjs_vote_network()
-	return render(request, "wjapp/votevis.html", {"nodes": v_network[0], "edges": v_network[1], "exp_name": "Vote Network of 19th Assembly"})
 
-def lwj_visualize(request):
-	lwj_network = lwj.create_visjs_lwj_network()
-	return render(request, "wjapp/lwjvis.html", {"nodes": lwj_network[0], "edges": lwj_network[1], "exp_name": "Network of Prof Lee"})
+def ref_visualize(request, name):
+	if name == "vote":
+		v_network = vt.create_visjs_vote_network()
+		return render(request, "wjapp/resultvis.html", {"nodes": v_network[0], "edges": v_network[1], "exp_name": "Network of 19th Assembly Vote Result"})
+
+	elif name == "lwj":
+		lwj_network = lwj.create_visjs_lwj_network()
+		return render(request, "wjapp/resultvis.html", {"nodes": lwj_network[0], "edges": lwj_network[1], "exp_name": "Network of 19th Assembly's features (By Prof Lee)"})
+
+	elif name == "cobill":
+		cb_network = cb.create_visjs_cb_network()
+		return render(request, "wjapp/resultvis.html", {"nodes": cb_network[0], "edges": cb_network[1], "exp_name": "Network of 20th Assembly Cosponsorship"})
+
 
 def export_all_db(request, ref):
 	"""
