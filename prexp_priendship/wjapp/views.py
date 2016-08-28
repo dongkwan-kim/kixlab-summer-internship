@@ -4,11 +4,13 @@ import firstexp.models as fem
 import firstexp.py_submit_log_analyzer as fsla
 import secondexp.models as sem
 import secondexp.py_submit_log_analyzer as ssla
-from wjapp.models import LWJNetwork, VoteNetwork
+from wjapp.models import LWJNetwork, VoteNetwork, CoBillNetwork
 from wjapp.models import Vote19, VoteVector, CoBill20
 import wjapp.py_vote_19 as vt
 import wjapp.py_lwj as lwj
 import wjapp.py_cobill as cb
+
+from ast import literal_eval 
 # Create your views here.
 
 exp_name = "Analysis"
@@ -140,17 +142,28 @@ def reg_network(request, network, deactive=False):
 				Vote.save()		
 
 	elif db == "cobill":
-		pass
+		old_cb = CoBillNetwork.objects.all()
+		for ocb in old_cb:
+			ocb.delete()
 
+		cb20_list = CoBill20.objects.all()
+		for cb20 in cb20_list:
+			p_list = literal_eval(cb20.p_list)
+			print(p_list)
+			break
 	return HttpResponse("success!")
 
 def reg_db(request, db):
-	
+	"""
+	This function crawls other pages to regiser db.
+	So, Use carefully.
+	"""
 	if db == "vote":
 		return HttpResponse("Blocked, check wjapp.views")
 		vt.crawl(293)
 	
 	elif db == "cobill":
-		cb.crawl_bill(2001744)
+		return HttpResponse("Blocked, check wjapp.views")
+		cb.crawl_all_bill()
 
 	return HttpResponse("success!")
