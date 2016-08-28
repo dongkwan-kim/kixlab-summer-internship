@@ -10,6 +10,9 @@
 		height: 32px;
 		display: inline-block;
 	}
+	.btn {
+		padding: 0px 10px;
+	}
 </style>
 
 <div class="container center">
@@ -47,8 +50,21 @@
 				</tr>
 				<tr>
 					<td>Reference</td>
-					<td><a href="/analyze/vote/vis/" class="waves-effect waves-light btn">vote</a></td>
-					<td><a href="http://143.248.156.240/~totoro1865/visualization/DongA/All/#information" class="waves-effect waves-light btn">Lee's</a></td>
+					<td></td>
+					<td>
+						<a class='dropdown-button btn' href='#' data-activates='dropdown-ref'>Drop_me!</a>
+						<ul id='dropdown-ref' class='dropdown-content'>
+							<li>
+								<a href="/analyze/vis/vote" class="tooltipped" data-position="right" data-tooltip="Assembly Vote Result">19th</a>
+							</li>
+							<li>
+								<a href="/analyze/vis/lwj" class="tooltipped" data-position="right" data-tooltip="Assembly's features (By Prof Lee)">20th</a>
+							</li>
+							<li>
+								<a href="/analyze/vis/cobill" class="tooltipped" data-position="right" data-tooltip="Assembly Cosponsorship">20th</a>
+							</li>
+						</ul>
+					</td>
 					<td></td>
 				</tr>
 
@@ -65,6 +81,8 @@
 	</div>
 	<div class="row">
 		<a href="https://github.com/todoaskit/prexp-priendship"><i class="svg-icon github"></i></a>
+	</div>
+	<div class="row">
 	</div>
 <div>
 

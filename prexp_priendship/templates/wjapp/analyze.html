@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
-{% block content%}
+{% block content %}
+{% load staticfiles %}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css" />
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css" rel="stylesheet" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+<script src="https://npmcdn.com/simple-statistics@2.0.0/dist/simple-statistics.min.js"></script>
 
 <style type="text/css">
 .network {
@@ -25,41 +31,41 @@ p.collection-header{
 	<div class="row">
 		
 		<div class="graph-col col m4 s12">
-			<div id="fep-network" class="network z-depth-1"></div>
 			<div class="collection with-header">
 				<p class="collection-header center">
 					<strong>1st Experiment</strong>
 					(N={{fep_n}})
 				</p>
-				<p href="#!" class="collection-item">Lorem Ipsum</p>
-				<p href="#!" class="collection-item">Lorem Ipsum</p>
 			</div>	
+			<div id="fep-network" class="network z-depth-1"></div>
 		</div>
 
 		<div class="graph-col col m4 s12">
-			<div id="sep-network" class="network z-depth-1"></div>
 			<div class="collection with-header">
 				<p class="collection-header center">
 					<strong>2nd Experiment</strong>
 					(N={{sep_n}})
 				</p>
-				<p href="#!" class="collection-item">Lorem Ipsum</p>
-				<p href="#!" class="collection-item">Lorem Ipsum</p>
 			</div>	
+			<div id="sep-network" class="network z-depth-1"></div>
 		</div>
 
 		<div class="graph-col col m4 s12 center">
 			
 			<div id="placeholder-block"></div>
-			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="19th Assembly Vote Result">
+			<br>
+			<div class="tooltipped" data-position="top" data-delay="50"
+				data-tooltip="19th Assembly Vote Result">
 				<div id="v-network" class="network z-depth-1"></div>
 			</div>
 			<br>
-			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="20th Assembly's features (By Prof Lee)">
+			<div class="tooltipped" data-position="top" data-delay="50"
+				data-tooltip="20th Assembly's features (By Prof Lee)">
 				<div id="lwj-network" class="network z-depth-1"></div>
 			</div>
 			<br>
-			<div class="tooltipped" data-position="top" data-delay="50" data-tooltip="20th Assembly Cosponsorship">
+			<div class="tooltipped" data-position="top" data-delay="50"
+				data-tooltip="20th Assembly Cosponsorship">
 				<div id="cb-network" class="network z-depth-1"></div>
 			</div>
 
@@ -136,7 +142,6 @@ function resize_placeholder(){
 	$pb.css("margin-top", $(".graph-col:first").height());
 }
 
-
 function focus_on_node(network, node_id){
 	var options = {
 		scale: 1,
@@ -203,9 +208,7 @@ $(document).ready(function(){
 		var nobj = draw_network($nid, n_list[$nid]["nodes"], n_list[$nid]["edges"], "grey-btn");
 		nobj_list[$nid] = nobj;
 	});
-
 });
-
 
 $(window).resize(function(){
 	make_network_square();
@@ -214,8 +217,10 @@ $(window).resize(function(){
 
 $(".rel-btn").click(function(){
 	var $color = $(this).attr("id");
-	draw_network("fep-network", fep_raw_nodes, fep_raw_edges, $color);	
-	draw_network("sep-network", sep_raw_nodes, sep_raw_edges, $color);	
+	new_fep_network = draw_network("fep-network", fep_raw_nodes, fep_raw_edges, $color);	
+	new_sep_network = draw_network("sep-network", sep_raw_nodes, sep_raw_edges, $color);	
+	nobj_list["fep-network"] = new_fep_network;
+	nobj_list["sep-network"] = new_sep_network;
 });
 
 </script>
