@@ -4,6 +4,7 @@ import wjapp.py_cobill as cb
 import firstexp.py_submit_log_analyzer as fsla
 import secondexp.py_submit_log_analyzer as ssla
 
+p_hash = fsla.create_p_hash()
 
 def get_intersection_w_list(net1, net2):
 	ip_list = []
@@ -13,14 +14,15 @@ def get_intersection_w_list(net1, net2):
 	
 	wl_1 = []
 	wl_2 = []
+	pl = []
 	for pair in ip_list:
 		w_1 = net1[pair]
 		w_2 = net2[pair]
 		if w_1 != 0 and w_2 != 0:
 			wl_1.append(w_1)
 			wl_2.append(w_2)
-
-	return [wl_1, wl_2]
+			pl.append(sorted([p_hash[pid] for pid in pair]))
+	return [wl_1, wl_2, pl]
 
 fep_network = fsla.create_network_with_whole_process()
 sep_network = ssla.create_network_with_whole_process()
