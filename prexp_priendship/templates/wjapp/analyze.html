@@ -29,13 +29,24 @@ p.collection-header{
 	margin-top: 20px;
 }
 
+.mobile-col {
+	writing-mode: tb-rl;
+	margin: 0px;
+}
+
+@media (max-width: 600px) {
+	.collection.with-header{
+		margin-bottom: 0px;
+	}
+}
+
 </style>
 
 <div class="container">
 	
 	<div class="row">
 		
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div class="graph-col">
 				<div class="collection with-header">
 					<p class="collection-header center">
@@ -43,11 +54,11 @@ p.collection-header{
 						(N={{fep_n}})
 					</p>
 				</div>	
-				<div id="fep-network" class="network z-depth-1"></div>
+				<div id="fep-network" class="network z-depth-1 hide-on-small-only"></div>
 			</div>
 		</div>
 
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div class="graph-col">
 				<div class="collection with-header">
 					<p class="collection-header center">
@@ -55,11 +66,11 @@ p.collection-header{
 						(N={{sep_n}})
 					</p>
 				</div>	
-				<div id="sep-network" class="network z-depth-1"></div>
+				<div id="sep-network" class="network z-depth-1 hide-on-small-only"></div>
 			</div>
 		</div>
 
-		<div class="col m4 s12">
+		<div class="col m4 s2">
 			<div id="placeholder-block"></div>
 		</div>
 
@@ -67,66 +78,78 @@ p.collection-header{
 
 	<div class="row">
 		
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="fep-v-graph" class="graph z-depth-1"></div>
 		</div>
 	
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="sep-v-graph" class="graph z-depth-1"></div>
 		</div>
 
-		<div class="col m4 s12">
+		<div class="col m4 hide-on-small-only">
 			<div class="tooltipped" data-position="top" data-delay="50"
 				data-tooltip="19th Assembly Vote Result">
 				<div id="v-network" class="ref-network network z-depth-1"></div>
 			</div>
 		</div>
-
+		<div class="col m4 s2 hide-on-med-and-up">
+			<ul class="mobile-col collection">
+				<li class="center">19th Assembly Vote Result</li>
+			</ul>
+		</div>
 	</div>
 
 	<div class="row">
 		
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="fep-lwj-graph" class="graph z-depth-1"></div>
 		</div>
 	
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="sep-lwj-graph" class="graph z-depth-1"></div>
 		</div>
 
-		<div class="col m4 s12">
+		<div class="col m4 hide-on-small-only">
 			<div class="tooltipped" data-position="top" data-delay="50"
-				data-tooltip="20th Assembly's features (By Prof Lee)">
+				data-tooltip="20th Assembly's Features (By Prof Lee)">
 				<div id="lwj-network" class="ref-network network z-depth-1"></div>
 			</div>
 		</div>
-
+		<div class="col m4 s2 hide-on-med-and-up">
+			<ul class="mobile-col collection">
+				<li class="center">20th Assembly Features</li>
+			</ul>
+		</div>
 	</div>
 	
 	<div class="row">
 		
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="fep-cb-graph" class="graph z-depth-1"></div>
 		</div>
 	
-		<div class="col m4 s12">
+		<div class="col m4 s5">
 			<div id="sep-cb-graph" class="graph z-depth-1"></div>
 		</div>
 
-		<div class="col m4 s12">
+		<div class="col m4 hide-on-small-only">
 			<div class="tooltipped" data-position="top" data-delay="50"
 				data-tooltip="20th Assembly Cosponsorship">
 				<div id="cb-network" class="ref-network network z-depth-1"></div>
 			</div>
-		<div>
-
+		</div>
+		<div class="col m4 s2 hide-on-med-and-up">
+			<ul class="mobile-col collection">
+				<li class="center">20th Assembly Cosponsorship</li>
+			</ul>
+		</div>
 	</div>
 
 </div>
 		
 			
 <!-- fixed buttons -->
-<div class="fixed-action-btn" style="bottom: 24px; left: 24px;">
+<div class="fixed-action-btn" style="bottom: 24px; left: 24px; right: initial;">
 	<a href="/" class="btn-floating btn-large waves-effect waves-light">
 		<i class="material-icons">home</i>
 	</a>
@@ -195,6 +218,7 @@ function make_square(){
 	var width = $(".network").width()
 	$(".network").height(width);
 	$(".graph").height(width)
+	$(".mobile-col").height(width)
 }
 
 function resize_placeholder(){
@@ -240,14 +264,13 @@ function is_node_exist(netw_id, node_id){
 }
 
 function draw_graph(gid, x_arr, y_arr, p_arr){
-	
 	x_arr = standardize(x_arr);
 	y_arr = standardize(y_arr);
+	
 	data = [];
 	for(var idx = 0; idx < x_arr.length; idx++){
 		data.push([x_arr[idx], y_arr[idx]]);
 	}
-	
 	$("#"+gid).highcharts({
         chart: {
             type: 'scatter',
@@ -300,8 +323,13 @@ function draw_graph(gid, x_arr, y_arr, p_arr){
                 tooltip: {
 					headerFormat: "",
 					pointFormatter: function(){
-						var idx = x_arr.indexOf(this.x);
-						return p_arr[idx]
+						var match_idx = -1;
+						for(var idx = 0; idx < y_arr.length; idx++){
+							if(y_arr[idx] == this.y && x_arr[idx] == this.x){
+								match_idx = idx
+							}
+						}
+						return p_arr[match_idx]
 					}
 				}
             }
@@ -324,7 +352,9 @@ function draw_all_graph(){
 		var x_arr = xyp_arr[0];
 		var y_arr = xyp_arr[1];
 		var p_arr = xyp_arr[2];
-		draw_graph($gid, x_arr, y_arr, p_arr);	
+		draw_graph($gid, x_arr, y_arr, p_arr);
+		console.log($gid);
+		console.log(sampleCorrelation(x_arr, y_arr))
 	});
 	remove_hc_label();
 }
@@ -365,8 +395,8 @@ $(document).ready(function(){
 	resize_placeholder();
 	draw_all_graph();	
 	setTimeout(function(){
-		draw_all_network();
-	}, 700)
+	//	draw_all_network();
+	}, 750)
 });
 
 $(window).resize(function(){

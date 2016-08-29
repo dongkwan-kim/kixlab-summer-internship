@@ -3,6 +3,32 @@ Start with http://simplestatistics.org/
 ISC License 
 */
 
+function max(x /*: Array<number> */) /*:number*/ {
+    var value;
+    for (var i = 0; i < x.length; i++) {
+        if (value === undefined || x[i] > value) {
+            value = x[i];
+        }
+    }
+    if (value === undefined) {
+        return NaN;
+    }
+    return value;
+}
+
+function min(x /*: Array<number> */)/*:number*/ {
+    var value;
+    for (var i = 0; i < x.length; i++) {
+        if (value === undefined || x[i] < value) {
+            value = x[i];
+        }
+    }
+    if (value === undefined) {
+        return NaN;
+    }
+    return value;
+}
+
 function sum(x/*: Array<number> */)/*: number */ {
     var sum = 0;
     var errorCompensation = 0;
@@ -94,7 +120,18 @@ function standardize(arr){
 	var stdev = standardDeviation(arr);
 	r_arr = []
 	for(var idx = 0; idx < arr.length; idx++){
-		r_arr.push((arr[idx]-avg)/stdev)
+		r_arr.push((arr[idx]-avg)/stdev);
 	}
 	return r_arr;
+}
+
+function featureScaling(arr){
+	var amax = max(arr);
+	var amin = min(arr);
+	r_arr = []
+	for(var idx = 0; idx < arr.length; idx++){
+		r_arr.push((arr[idx]-amin)/(amax-amin));
+	}
+	return r_arr;
+
 }

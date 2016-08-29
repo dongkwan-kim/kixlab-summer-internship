@@ -24,13 +24,13 @@ def get_intersection_w_list(net1, net2):
 			pl.append(sorted([p_hash[pid] for pid in pair]))
 	return [wl_1, wl_2, pl]
 
-fep_network = fsla.create_network_with_whole_process()
-sep_network = ssla.create_network_with_whole_process()
-v_network = vt.create_vote_network(piv_w_value=1)
-lwj_network = lwj.create_lwj_network(piv_w_value=1)
-cb_network = cb.create_cb_network(piv_w_value=1)
-
 def get_w_list_hash():
+	fep_network = fsla.create_network_with_whole_process()
+	sep_network = ssla.create_network_with_whole_process()
+	v_network = vt.create_vote_network(piv_w_value=1)
+	lwj_network = lwj.create_lwj_network(piv_w_value=1)
+	cb_network = cb.create_cb_network(piv_w_value=1)
+
 	w_list_hash = {}
 	col = {
 		"fep": fep_network,

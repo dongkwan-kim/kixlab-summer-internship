@@ -99,6 +99,17 @@ def export_all_db(request, ref):
 			line = ",".join(line_arr)
 			output.write(line+"\r\n")
 	
+	elif ref == "cobill":
+		cb_network = cb.create_cb_network(piv_w_value=1)
+		for cb_pair in cb_network.keys():
+			fep_w = fep_network[cb_pair]
+			sep_w = sep_network[cb_pair]
+			cb_w = cb_network[cb_pair]
+		
+			line_arr = [p_hash[pid] for pid in cb_pair] + [str(fep_w), str(sep_w), str(cb_w)]
+			line = ",".join(line_arr)
+			output.write(line+"\r\n")
+
 	output.close()	
 	return HttpResponse("success!")
 
@@ -155,12 +166,13 @@ def reg_network(request, network, deactive=False):
 				Vote = VoteNetwork(p1=p_pair[0], p2=p_pair[1], weight=weight)
 				Vote.save()		
 
-	elif network == "cobill":
+	elif network == "cobillud":
 		old_cb = CoBillNetwork.objects.all()
 		for ocb in old_cb:
 			ocb.delete()
 		
 		pair_list = get_set_of_pair(my_p_list)
+		p_cnt_hash = dict([(str(p), 0) for p in my_p_list])
 		cb_network = dict([(x, 0) for x in pair_list])
 		cb20_list = CoBill20.objects.all()
 		for cb20 in cb20_list:
@@ -172,8 +184,10 @@ def reg_network(request, network, deactive=False):
 					if p_name in ["김성태", "최경환"]:
 						if p.split("_")[1] in ["金聖泰", "崔炅煥"]:
 							intersection_list.append(p_name)
+							p_cnt_hash[p_name] += 1
 					else:
 						intersection_list.append(p_name)
+						p_cnt_hash[p_name] += 1
 
 			i_pair_list = get_set_of_pair(intersection_list)
 			for p_tuple in i_pair_list:
@@ -181,13 +195,64 @@ def reg_network(request, network, deactive=False):
 
 		for ((p1, p2), weight) in cb_network.items():
 			if weight > 0:
+				j_weight = weight/(p_cnt_hash[p1]+p_cnt_hash[p2]-weight)
+				cobill = CoBillNetwork(p1=p1, p2=p2, weight=j_weight)
+				cobill.save()
+
+	elif network == "cobilld":
+		old_cb = CoBillNetwork.objects.all()
+		for ocb in old_cb:
+			ocb.delete()
+		
+		pair_list = get_list_of_pair(my_p_list)
+		p_cnt_hash = dict([(str(p), 0) for p in my_p_list])
+		cb_network = dict([(x, 0) for x in pair_list])
+		cb20_list = CoBill20.objects.all()
+		for cb20 in cb20_list:
+			p_list = literal_eval(cb20.p_list)
+
+			leader_p = p_list[0]
+			leader_name = leader_p.split("_")[0]
+			if leader_name in my_p_list:
+				if leader_name in ["김성태", "최경환"]:
+					if leader_p.split("_")[1] not in ["金聖泰", "崔炅煥"]:
+						continue
+			else:
+				continue
+
+			intersection_list = []
+			for p in p_list:
+				p_name = p.split("_")[0]
+				if p_name in my_p_list:
+					if p_name in ["김성태", "최경환"]:
+						if p.split("_")[1] in ["金聖泰", "崔炅煥"]:
+							intersection_list.append(p_name)
+							p_cnt_hash[p_name] += 1
+					else:
+						intersection_list.append(p_name)
+						p_cnt_hash[p_name] += 1
+			
+			for ip in intersection_list:
+				if leader_name != ip:
+					cb_network[(leader_name, ip)] += 1
+		
+		rcb_network = {}
+		for ((p1, p2), weight) in cb_network.items():
+			sorted_p = tuple(sorted([p1, p2]))
+			rcb_network[sorted_p] = cb_network[(p1, p2)] + cb_network[(p2, p1)]
+
+		for ((p1, p2), weight) in rcb_network.items():
+			if weight > 0:
 				cobill = CoBillNetwork(p1=p1, p2=p2, weight=weight)
 				cobill.save()
-	
+
 	return HttpResponse("success!")
 
 def get_set_of_pair(l):
 	return set([tuple(sorted([x, y])) for x in l for y in l if x != y])
+
+def get_list_of_pair(l):
+	return [(x, y) for x in l for y in l if x != y]
 
 def reg_db(request, db):
 	"""

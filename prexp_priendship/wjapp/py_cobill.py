@@ -3,7 +3,7 @@ import urllib.parse
 from wjapp.models import CoBill20, CoBillNetwork
 import firstexp.py_submit_log_analyzer as fsla
 
-def create_cb_network(piv_w_value=0.3):
+def create_cb_network(piv_w_value=0.27):
 	"""
 	:return: dict {(pid_x, pid_y): "weight"}
 	"""
@@ -22,7 +22,6 @@ def create_cb_network(piv_w_value=0.3):
 	for k, v in cb_network.items():
 		if v > v_piv_ascend:
 			rcb_network[k] = v
-
 	return rcb_network
 
 def create_visjs_network_from_raw(p_network, p_hash):
