@@ -31,10 +31,11 @@ def create_pair_list(p_hash):
 	return set([tuple(sorted([x, y])) for x in p_hash.keys() for y in p_hash.keys()])
 
 
-def create_network_from_logs(pair_list, option=0):
+def create_network_from_logs(pair_list, option=0, piv_w_value=1):
 	"""
 	:param pair_list: set that consists of combination ("pid_x", "pid_y")
 	:param option: {model(default):0, local:1}
+	:param piv_w_value: float pivot weight to cut off data
 	:return: dict {"(pid_x, pid_y)": "weight"}
 	"""
 	# (x, (0, 0)) = (pair, (sum, count))
@@ -54,14 +55,23 @@ def create_network_from_logs(pair_list, option=0):
 			if c != 0:
 				p_network[pair] = s/c
 			else:
-				p_network[pair] = 0
+				p_network[pair] = False
+	
+	mini_p_network = {}
+	for pair in p_network.keys():
+		if p_network[pair] != False:
+			mini_p_network[pair] = p_network[pair]
 
-	# source from local file
-	else:
-		# no need to implement
-		pass
+	rp_network = {}
+	v_piv_ascend = get_piv(mini_p_network.values(), piv_w_value/2, option="ascend")
+	v_piv_descend = get_piv(mini_p_network.values(), piv_w_value/2, option="descend")
+	for k, v in mini_p_network.items():
+		if v >= v_piv_ascend:
+			rp_network[k] = v
+		if v <= v_piv_descend:
+			rp_network[k] = v
 
-	return p_network
+	return rp_network
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	"""
@@ -109,10 +119,10 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 	return (node_list, edge_list)
 
 
-def create_visjs_with_whole_process(option=0):
+def create_visjs_with_whole_process(option=0, piv_w_value=0.5):
 	p_hash = create_p_hash(option)
 	pair_list = create_pair_list(p_hash)
-	p_network = create_network_from_logs(pair_list, option)
+	p_network = create_network_from_logs(pair_list, option, piv_w_value)
 	visjs_network = create_visjs_network_from_raw(p_network, p_hash)
 	return visjs_network
 
@@ -121,6 +131,20 @@ def create_network_with_whole_process(option=0):
 	pair_list = create_pair_list(p_hash)
 	p_network = create_network_from_logs(pair_list, option)
 	return p_network
+
+
+def get_piv(l, c, option="ascend"):
+	if option == "ascend":
+		sl = list(reversed(sorted([x for x in l])))
+	else:
+		sl = list(sorted([x for x in l]))
+	length = len(l)
+
+	if c != 1:
+		pidx = int(c*length)
+		return sl[pidx]
+	else:
+		return sl[-1] - 1
 
 
 if __name__ == "__main__":
