@@ -31,13 +31,14 @@ def create_pair_list(p_hash):
 	return set([tuple(sorted([x, y])) for x in p_hash.keys() for y in p_hash.keys()])
 
 
-def create_network_from_logs(pair_list, option=0):
+def create_network_from_logs(pair_list, option=0, piv_w_value=1):
 	"""
-	:param pair_list: set that consists of combination ("pid_x", "pid_y")
+	:param pair_list: set that consists of combination (pid_x, pid_y)
 	:param option: {model(default):0, local:1}
-	:return: dict {"(pid_x, pid_y)": "weight"}
+	:param piv_w_value: float pivot weight to cut off data
+	:return: dict {(pid_x, pid_y): weight}
 	"""
-	p_network = dict([(x, 0) for x in pair_list])
+	p_network = dict([(x, (0, 0)) for x in pair_list])
 	p_list = Politician.objects.all()
 	p_cnt_hash = dict([(str(p.pid), 0) for p in p_list])
 	# source from model
@@ -53,24 +54,36 @@ def create_network_from_logs(pair_list, option=0):
 				p_cnt_hash[se] += 1
 				
 			if len(select_tuple) == 2:
+				(w, c) = p_network[select_tuple]
 				if q_kind == "red":
-					p_network[select_tuple] -= 1
+					p_network[select_tuple] = (w-1, c+1)
 				else:
-					p_network[select_tuple] += 1
-		for pair in p_network.keys():
-			s = p_network[pair]
-			c = 0
-			for p in pair:
-				c += p_cnt_hash[p]
-			if c != 0:
-				p_network[pair] = 100*s/c
+					p_network[select_tuple] = (w+1, c+1)
+		
+		for (p1, p2) in p_network.keys():
+			weight = p_network[(p1, p2)][0]
+			inter = p_network[(p1, p2)][1]
+			union = p_cnt_hash[p1]+p_cnt_hash[p2]-inter
+			
+			if inter != 0:
+				p_network[(p1, p2)] = weight/union
 			else:
-				p_network[pair] = 0
-	# source from local file
-	else:
-		# no need to implemetn
-		pass
-	return p_network
+				p_network[(p1, p2)] = False
+	
+	mini_p_network = {}
+	for pair in p_network.keys():
+		if p_network[pair] != False:
+			mini_p_network[pair] = p_network[pair]
+
+	rp_network = {}
+	v_piv_ascend = get_piv(mini_p_network.values(), piv_w_value/2, option="ascend")
+	v_piv_descend = get_piv(mini_p_network.values(), piv_w_value/2, option="descend")
+	for k, v in mini_p_network.items():
+		if v >= v_piv_ascend:
+			rp_network[k] = v
+		if v <= v_piv_descend:
+			rp_network[k] = v
+	return rp_network
 
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
@@ -117,11 +130,10 @@ def create_visjs_network_from_raw(p_network, p_hash, option=0):
 
 	return (node_list, edge_list)
 
-
-def create_visjs_with_whole_process(option=0):
+def create_visjs_with_whole_process(option=0, piv_w_value=0.65):
 	p_hash = create_p_hash(option)
 	pair_list = create_pair_list(p_hash)
-	p_network = create_network_from_logs(pair_list, option)
+	p_network = create_network_from_logs(pair_list, option, piv_w_value)
 	visjs_network = create_visjs_network_from_raw(p_network, p_hash)
 	return visjs_network
 
@@ -130,6 +142,20 @@ def create_network_with_whole_process(option=0):
 	pair_list = create_pair_list(p_hash)
 	p_network = create_network_from_logs(pair_list, option)
 	return p_network
+
+def get_piv(l, c, option="ascend"):
+	if option == "ascend":
+		sl = list(reversed(sorted([x for x in l])))
+	else:
+		sl = list(sorted([x for x in l]))
+	length = len(l)
+
+	if c != 1:
+		pidx = int(c*length)
+		return sl[pidx]
+	else:
+		return sl[-1] - 1
+
 
 if __name__ == "__main__":
 	visjs = create_visjs_with_whole_process(1)
