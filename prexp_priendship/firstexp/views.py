@@ -44,9 +44,21 @@ def visualize(request):
 	return render(request, "firstexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1], "exp_name": exp_name})
 
 def front(request):
-	return render(request, "firstexp/front.html", {"exp_name": exp_name})
+	return _front(request)
+
+def deploy_front(request):
+	return _front(request, "deploy/")
+
+def _front(request, odir=""):
+	return render(request, odir+"firstexp/front.html", {"exp_name": exp_name})
 
 def start(request):
+	return _start(request)
+
+def deploy_start(request):
+	return _start(request, "deploy/")
+
+def _start(request, odir=""):
 	# how many did a user solve
 	num_of_sol = 0
 
@@ -64,4 +76,4 @@ def start(request):
 
 	# random sort
 	p_list = Politician.objects.all().order_by("?")
-	return render(request, "firstexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})
+	return render(request, odir+"firstexp/start.html", {"rp_list": p_list[:6], "q_kind": q_list[randrange(0, 2)], "nos": num_of_sol, "exp_name": exp_name})

@@ -69,6 +69,8 @@
 	<input id="inp-select" type="hidden" name="select_p" value="tbd">
 </form>
 <script>
+
+
 var shown_list = []
 $(document).ready(function(){
 	{% for p in rp_list %}
@@ -101,9 +103,7 @@ $(".click").click(function(){
 			for(var idx=0; idx<2; idx++){
 				$("#"+clicked_list[idx]).slideUp("slow");
 			}
-			if({{nos}} == 6){
-				alert("7개면 충분하지만, 더 많이 하시면 더욱 좋습니다"); 
-			}
+			
 			setTimeout(function(){
 				$("#log-submit").submit();
 			}, 600);

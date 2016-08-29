@@ -36,9 +36,21 @@ def visualize(request):
 	return render(request, "secondexp/resultvis.html", {"nodes": visjs_network[0], "edges": visjs_network[1], "exp_name": exp_name})
 
 def front(request):
-	return render(request, "secondexp/front.html", {"exp_name": exp_name})
+	return _front(request)
+
+def deploy_front(request):
+	return _front(request, "deploy/")
+
+def _front(request, odir=""):
+	return render(request, odir+"secondexp/front.html", {"exp_name": exp_name})
 
 def start(request):
+	return _start(request)
+
+def deploy_start(request):
+	return _start(request, "deploy/")
+
+def _start(request, odir=""):
 	# how many did a user solve
 	num_of_sol = 0
 	if request.method == "POST":
@@ -59,4 +71,4 @@ def start(request):
 	nn = na.NaverNewsXML(" ".join([str(x.name) for x in rp_list]), display=3)
 	news_list = nn.get_news_items()
 
-	return render(request, "secondexp/start.html", {"rp_list": rp_list, "nos": num_of_sol, "exp_name": exp_name, "news_list": news_list})
+	return render(request, odir+"secondexp/start.html", {"rp_list": rp_list, "nos": num_of_sol, "exp_name": exp_name, "news_list": news_list})

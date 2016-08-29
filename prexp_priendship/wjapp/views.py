@@ -113,10 +113,7 @@ def export_all_db(request, ref):
 	output.close()	
 	return HttpResponse("success!")
 
-def reg_network(request, network, deactive=False):
-	if deactive:
-		return HttpResponse("Deactived, check the wjapp.views.py")
-	
+def reg_network(request, network):
 	my_pobj_list = fem.Politician.objects.all()
 	my_p_list = [p.name for p in my_pobj_list]
 	
@@ -155,8 +152,8 @@ def reg_network(request, network, deactive=False):
 
 		vv_list = VoteVector.objects.all()
 		p_hash = fsla.create_p_hash()
-		
-		piv_attendance = 0
+	
+		piv_attendance = 0.34 # = avg - 1*stdev
 		vvlen = len(vv_list)
 		for idx in range(vvlen):
 			for jdx in range(idx+1, vvlen):
@@ -191,16 +188,17 @@ def reg_network(request, network, deactive=False):
 					else:
 						intersection_list.append(p_name)
 						p_cnt_hash[p_name] += 1
-
 			i_pair_list = get_set_of_pair(intersection_list)
 			for p_tuple in i_pair_list:
 				cb_network[p_tuple] += 1
-
+		
 		for ((p1, p2), weight) in cb_network.items():
 			if weight > 0:
-				j_weight = weight/(p_cnt_hash[p1]+p_cnt_hash[p2]-weight)
-				cobill = CoBillNetwork(p1=p1, p2=p2, weight=j_weight)
-				cobill.save()
+				union = p_cnt_hash[p1]+p_cnt_hash[p2]-weight
+				if union > 36: # = avg - 1*stdev
+					j_weight = weight/union
+					cobill = CoBillNetwork(p1=p1, p2=p2, weight=j_weight)
+					cobill.save()
 
 	elif network == "cobilld":
 		old_cb = CoBillNetwork.objects.all()

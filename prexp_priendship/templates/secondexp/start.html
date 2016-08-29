@@ -123,9 +123,6 @@ function set_affinity_score(val){
 
 var shown_list = [];
 $(document).ready(function(){
-	if("{{nos}}" == "7"){
-		alert("충분히 많이 하셨습니다. 하지만 더 하셔도 됩니다! 이 메세지 이후로는 끝이 없다는 것을 유념해주세요")
-	}
 	set_affinity_score(0);	
 	{% for p in rp_list %}
 	shown_list.push({{p.pid}});
