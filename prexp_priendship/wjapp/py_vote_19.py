@@ -49,6 +49,10 @@ def get_eud(vv1, vv2):
 	eud = math.sqrt(sum([(e1 - e2)**2 for (e1, e2) in zip(vv1_list, vv2_list)]))
 	return eud
 
+def get_attendance(vv):
+	vv_list = vv.split(",")
+	return 1 - vv_list.count("0")/len(vv_list)
+
 def create_vote_network(piv_w_value=0.15):
 	"""
 	:return: dict {(pid_x, pid_y): "weight"}

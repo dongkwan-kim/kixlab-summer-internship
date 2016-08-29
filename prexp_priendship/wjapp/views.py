@@ -156,15 +156,18 @@ def reg_network(request, network, deactive=False):
 		vv_list = VoteVector.objects.all()
 		p_hash = fsla.create_p_hash()
 		
+		piv_attendance = 0
 		vvlen = len(vv_list)
 		for idx in range(vvlen):
 			for jdx in range(idx+1, vvlen):
 				vv1 = vv_list[idx]
 				vv2 = vv_list[jdx]
-				p_pair = sorted([vv1.name, vv2.name])
-				weight = 1/(1+vt.get_eud(vv1.vote, vv2.vote))
-				Vote = VoteNetwork(p1=p_pair[0], p2=p_pair[1], weight=weight)
-				Vote.save()		
+				if vt.get_attendance(vv1.vote) > piv_attendance\
+					and vt.get_attendance(vv2.vote) > piv_attendance:
+					p_pair = sorted([vv1.name, vv2.name])
+					weight = 1/(1+vt.get_eud(vv1.vote, vv2.vote))
+					Vote = VoteNetwork(p1=p_pair[0], p2=p_pair[1], weight=weight)
+					Vote.save()		
 
 	elif network == "cobillud":
 		old_cb = CoBillNetwork.objects.all()

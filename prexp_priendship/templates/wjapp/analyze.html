@@ -354,7 +354,12 @@ function draw_all_graph(){
 		var p_arr = xyp_arr[2];
 		draw_graph($gid, x_arr, y_arr, p_arr);
 		console.log($gid);
+		p_xy = get_graph_of_domain(x_arr, y_arr, "+");
+		n_xy = get_graph_of_domain(x_arr, y_arr, "-");
+
 		console.log(sampleCorrelation(x_arr, y_arr))
+		console.log(sampleCorrelation(n_xy["x"], n_xy["y"]))
+		console.log(sampleCorrelation(p_xy["x"], p_xy["y"]))
 	});
 	remove_hc_label();
 }
@@ -365,6 +370,26 @@ function remove_hc_label(){
 			$(this).css("display", "none");
 		}
 	});
+}
+
+function get_graph_of_domain(x_arr, y_arr, sgn){
+	r_xy = {"x": [], "y": []};
+	if(sgn == "+"){
+		for(var idx = 0; idx < x_arr.length; idx++){
+			if(x_arr[idx] >= 0){
+				r_xy["x"].push(x_arr[idx]);
+				r_xy["y"].push(y_arr[idx]);
+			}
+		}
+	} else {
+		for(var idx = 0; idx < x_arr.length; idx++){
+			if(x_arr[idx] <= 0){
+				r_xy["x"].push(x_arr[idx]);
+				r_xy["y"].push(y_arr[idx]);
+			}
+		}
+	}
+	return r_xy;
 }
 
 var fep_raw_nodes = {{fep_nodes|safe}};
@@ -395,7 +420,7 @@ $(document).ready(function(){
 	resize_placeholder();
 	draw_all_graph();	
 	setTimeout(function(){
-	//	draw_all_network();
+		draw_all_network();
 	}, 750)
 });
 
