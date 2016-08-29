@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+#mynetwork {
+	width: 100%;
+	height: 450px;
+	margin-top: 20px;
+	border: 1px solid lightgray;
+}
+</style>
+
+<div class="container">
+	<div style="margin-top:20px;" class="center">
+		<h5>{{exp_name}}</h5>
+	</div>
+	<div class="row center">
+		<div class="col s12">
+			<div id="mynetwork" class="z-depth-1"></div>
+		</div>
+	</div>
+	<div class="row center">
+		<a id="green-btn" class="green waves-effect waves-light btn rel-btn">친한 관계</a>
+		<a id="red-btn" class="red waves-effect waves-light btn rel-btn">안 친한 관계</a>
+		<a id="grey-btn" class="grey waves-effect waves-light btn rel-btn">모든 관계</a>
+	</div>
+	<div class="row center">
+		<a href="/" class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">home</i></a>
+	</div>
+</div>
+
+<script>
+
+var raw_nodes = {{nodes|safe}};
+var raw_edges = {{edges|safe}};
+
+var container = document.getElementById('mynetwork');
+
+function draw_network(color_option){
+	var edges = [];
+	for(var idx = 0; idx < raw_edges.length; idx++){
+		if(color_option == "green-btn"){
+			if(raw_edges[idx]["color"]["color"] == "green"){
+				edges.push(raw_edges[idx]);
+			}
+		} else if (color_option == "red-btn"){
+			if(raw_edges[idx]["color"]["color"] == "red"){
+				edges.push(raw_edges[idx]);
+			}
+		} else {
+			edges = raw_edges;
+		}
+	}
+	var nodes = new vis.DataSet(raw_nodes);
+	var edges = new vis.DataSet(edges);
+
+	var data = {
+		nodes: nodes,
+		edges: edges
+	};
+	var options = {};
+	var network = new vis.Network(container, data, options);
+}
+
+$(document).ready(function(){
+	draw_network("grey-btn");	
+});
+
+$(".rel-btn").click(function(){
+	$id = $(this).attr("id");
+	draw_network($id);
+});
+
+</script>
+{% endblock %}
