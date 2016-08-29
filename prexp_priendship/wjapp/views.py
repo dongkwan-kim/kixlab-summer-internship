@@ -44,8 +44,10 @@ def analyze(request):
 		"lwj_edges": lwj_network[1],
 		"cb_nodes": cb_network[0],
 		"cb_edges": cb_network[1],
-		"fep_n": len(fep_user_set),
-		"sep_n": len(sep_user_set),
+		"fep_n_person": len(fep_user_set),
+		"sep_n_person": len(sep_user_set),
+		"fep_n_submit": len(fep_slog_list),
+		"sep_n_submit": len(sep_slog_list),
 		"w_hash": w_hash,
 		"exp_name": exp_name
 	})

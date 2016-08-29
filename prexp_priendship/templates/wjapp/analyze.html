@@ -40,6 +40,28 @@ p.collection-header{
 	}
 }
 
+#placeholder-block {
+	margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.not-first-row {
+	margin-top:40px;
+}
+
+.t-all{
+	background-color: #F2F2F2;
+}
+
+.svg-icon.github {
+		background-image: url(https://assets-cdn.github.com/favicon.ico);
+}
+.svg-icon {
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+}
+
 </style>
 
 <div class="container">
@@ -48,30 +70,43 @@ p.collection-header{
 		
 		<div class="col m4 s5">
 			<div class="graph-col">
-				<div class="collection with-header">
-					<p class="collection-header center">
-						<strong>1st Experiment</strong>
-						(N={{fep_n}})
-					</p>
-				</div>	
+				<ul class="collection with-header">
+					<li class="collection-header center">
+						<strong>1st Experiment</strong><br>
+					</li>
+					<li class="collection-item">
+						participant<span class="badge">{{fep_n_person}}</span>
+					</li>
+					<li class="collection-item">
+						submit<span class="badge">{{fep_n_submit}}</span>
+					</li>
+				</ul>	
 				<div id="fep-network" class="network z-depth-1 hide-on-small-only"></div>
 			</div>
 		</div>
 
 		<div class="col m4 s5">
 			<div class="graph-col">
-				<div class="collection with-header">
-					<p class="collection-header center">
-						<strong>2nd Experiment</strong>
-						(N={{sep_n}})
-					</p>
-				</div>	
+				<ul class="collection with-header">
+					<li class="collection-header center">
+						<strong>2nd Experiment</strong><br>
+					</li>
+					<li class="collection-item">
+						participant<span class="badge">{{sep_n_person}}</span>
+					</li>
+					<li class="collection-item">
+						submit<span class="badge">{{sep_n_submit}}</span>
+					</li>
+				</ul>
 				<div id="sep-network" class="network z-depth-1 hide-on-small-only"></div>
 			</div>
 		</div>
 
 		<div class="col m4 s2">
-			<div id="placeholder-block"></div>
+			<div id="placeholder-block" class="card-panel blue lighten-4 hide-on-small-only">
+				<span class="grey-text text-darken-3">I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+				</span>
+			</div>
 		</div>
 
 	</div>
@@ -144,7 +179,83 @@ p.collection-header{
 			</ul>
 		</div>
 	</div>
+	
+	<div class="row not-first-row">
+		<p class="center">
+			<b>Correlation Coefficient by X-domain(all, neg, pos)</b>
+		</p>
+		<table class="highlight centered">
+		<thead>
+			<tr>
+				<th class="t-all">all</th>
+				<th>neg(-)</th>
+				<th>pos(+)</th>
+				<th class="t-all">all</th>
+				<th>neg(-)</th>
+				<th>pos(+)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="correl-fep-all-v t-all"></td>
+				<td class="correl-fep-neg-v"></td>
+				<td class="correl-fep-pos-v"></td>
+				<td class="correl-sep-all-v t-all"></td>
+				<td class="correl-sep-neg-v"></td>
+				<td class="correl-sep-pos-v"></td>
+			</tr>
+			<tr>
+				<td class="correl-fep-all-lwj t-all"></td>
+				<td class="correl-fep-neg-lwj"></td>
+				<td class="correl-fep-pos-lwj"></td>
+				<td class="correl-sep-all-lwj t-all"></td>
+				<td class="correl-sep-neg-lwj"></td>
+				<td class="correl-sep-pos-lwj"></td>
+			</tr>
+			<tr>
+				<td class="correl-fep-all-cb t-all"></td>
+				<td class="correl-fep-neg-cb"></td>
+				<td class="correl-fep-pos-cb"></td>
+				<td class="correl-sep-all-cb t-all"></td>
+				<td class="correl-sep-neg-cb"></td>
+				<td class="correl-sep-pos-cb"></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
 
+	<div class="row not-first-row">
+		<table class="highlight centered">
+		<thead>
+			<tr>
+				<th>Source</th>
+				<th>Metric</th>
+				<th>Data Manipulation</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="http://read-data.codenamu.org/congress-report">Codenamu</a></td>
+				<td>1/(1+Euclid_distance(v1, v2))</td>
+				<td>μ - 1σ ~ end</td>
+			</tr>
+			<tr>
+				<td><a href="http://143.248.156.240/~totoro1865/visualization/DongA/All/#information">Prof Lee wonjae</a></td>
+				<td>Index from <a href="https://www.facebook.com/wnjlee/posts/10153739385841272">13 features</a></td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td><a href="http://watch.peoplepower21.org/">PSPD</a></td>
+				<td>Jaccard Index</td>
+				<td>μ - 1σ ~ end</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<div style="margin-top:50px;" class="row center">
+		<a href="https://github.com/todoaskit/prexp-priendship"><i class="svg-icon github"></i></a>
+	</div>
 </div>
 		
 			
@@ -223,7 +334,7 @@ function make_square(){
 
 function resize_placeholder(){
 	$pb = $("#placeholder-block");
-	$pb.css("margin-top", $(".graph-col:first").height()+20);
+	$pb.css("height", $(".graph-col:first").height());
 }
 
 function focus_on_node(network, node_id){
@@ -335,7 +446,7 @@ function draw_graph(gid, x_arr, y_arr, p_arr){
             }
         },
 		series: [{
-			color: 'rgba(124, 138, 212, .5)',
+			color: 'rgba(100, 181, 246, .5)',
 			data: data,
 		}]
 	});
@@ -353,15 +464,40 @@ function draw_all_graph(){
 		var y_arr = xyp_arr[1];
 		var p_arr = xyp_arr[2];
 		draw_graph($gid, x_arr, y_arr, p_arr);
-		console.log($gid);
 		p_xy = get_graph_of_domain(x_arr, y_arr, "+");
 		n_xy = get_graph_of_domain(x_arr, y_arr, "-");
-
-		console.log(sampleCorrelation(x_arr, y_arr))
-		console.log(sampleCorrelation(n_xy["x"], n_xy["y"]))
-		console.log(sampleCorrelation(p_xy["x"], p_xy["y"]))
+		set_correlation($gid, x_arr, y_arr);
 	});
 	remove_hc_label();
+}
+
+function set_correlation(gid, x_arr, y_arr){
+	p_xy = get_graph_of_domain(x_arr, y_arr, "+");
+	n_xy = get_graph_of_domain(x_arr, y_arr, "-");
+	var col = gid.split("-")[0];
+	var row = gid.split("-")[1];
+	var dom_arr = {
+		"all": {"x": x_arr, "y": y_arr},
+		"neg": n_xy,
+		"pos": p_xy
+	};
+	for(dom in dom_arr){
+		var cor_class = ["correl", col, dom, row].join("-");
+		var d = dom_arr[dom];
+		var correl = sampleCorrelation(d["x"], d["y"]).toFixed(4);
+		set_color_correlation(cor_class, correl);
+		$("."+cor_class).text(correl);
+	}
+}
+
+function set_color_correlation(cor_class, correl){
+	var r = parseInt(-231 * correl + 152);
+	var g = parseInt(149 * correl + 126);
+	var b = parseInt(36 * correl + 68);
+	var color = "rgb("+r+", "+g+", "+b+")";
+	var font_weight = parseInt((3062 * correl * correl + 199 * correl + 350)/100)*100;
+	$("."+cor_class).css("color", color);
+	$("."+cor_class).css("font-weight", font_weight);
 }
 
 function remove_hc_label(){
@@ -420,7 +556,7 @@ $(document).ready(function(){
 	resize_placeholder();
 	draw_all_graph();	
 	setTimeout(function(){
-		draw_all_network();
+	//	draw_all_network();
 	}, 750)
 });
 
