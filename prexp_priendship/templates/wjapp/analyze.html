@@ -182,7 +182,7 @@ p.collection-header{
 	
 	<div class="row not-first-row">
 		<p class="center">
-			<b>Correlation Coefficient by X-domain(all, neg, pos)</b>
+			<b>Correlation Coefficient by Domain</b>
 		</p>
 		<table class="highlight centered">
 		<thead>
@@ -225,6 +225,60 @@ p.collection-header{
 	</div>
 
 	<div class="row not-first-row">
+		<p class="center">
+			<b>Coefficient of Determination(R²)</b>
+		</p>
+		<table class="highlight centered">
+		<thead>
+			<tr>
+				<th>1st Exp.</th>
+				<th>2nd Exp.</th>
+				<th>variable</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>0.033031</td>
+				<td>0.000394</td>
+				<td>vote</td>
+			</tr>
+			<tr>
+				<td>0.012757</td>
+				<td>0.082419</td>
+				<td>lwj</td>
+			</tr>
+			<tr>
+				<td>0.039277</td>
+				<td>0.090949</td>
+				<td>cobill</td>
+			</tr>
+			<tr>
+				<td>0.065590</td>
+				<td>0.037468</td>
+				<td>vote, lwj</td>
+			</tr>
+			<tr>
+				<td>0.019972</td>
+				<td>0.097635</td>
+				<td>vote, cobill</td>
+			</tr>
+			<tr>
+				<td>0.056806</td>
+				<td>0.112826</td>
+				<td>lwj, cobill</td>
+			</tr>
+			<tr>
+				<td>0.030364</td>
+				<td>0.274597</td>
+				<td>vote, lwj, cobill</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+	<div class="row not-first-row">
+		<p class="center">
+			<b>Data Information</b>
+		</p>
 		<table class="highlight centered">
 		<thead>
 			<tr>
@@ -323,7 +377,6 @@ function draw_all_network(){
 		nobj_list[$nid] = nobj;
 	});
 }
-
 
 function make_square(){
 	var width = $(".network").width()
@@ -459,7 +512,7 @@ function draw_all_graph(){
 		var exp_id = $gid.split("-")[0];
 		var ref_id = $gid.split("-")[1];
 		
-		var xyp_arr = w_hash[exp_id][ref_id];
+		var xyp_arr = w_uni_hash[exp_id][ref_id];
 		var x_arr = xyp_arr[0];
 		var y_arr = xyp_arr[1];
 		var p_arr = xyp_arr[2];
@@ -548,10 +601,8 @@ var n_list = {
 }
 var nobj_list = {}
 
-var w_hash = {{w_hash|safe}}
-
+var w_uni_hash = {{w_uni_hash|safe}}
 $(document).ready(function(){
-	console.log(w_hash);
 	make_square();
 	resize_placeholder();
 	draw_all_graph();	

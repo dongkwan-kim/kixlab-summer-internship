@@ -31,7 +31,6 @@ def analyze(request):
 	sep_user_set = set([u.token for u in sep_slog_list])
 	
 	w_hash = stat.get_w_list_hash()
-
 	return render(request, "wjapp/analyze.html",
 	{
 		"fep_nodes": fep_network[0],
@@ -48,7 +47,7 @@ def analyze(request):
 		"sep_n_person": len(sep_user_set),
 		"fep_n_submit": len(fep_slog_list),
 		"sep_n_submit": len(sep_slog_list),
-		"w_hash": w_hash,
+		"w_uni_hash": w_hash[0],
 		"exp_name": exp_name
 	})
 

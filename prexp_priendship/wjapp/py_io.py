@@ -23,11 +23,29 @@ def export_all_db(request, ref):
 	pid_hash = dict((y, x) for (x, y) in p_hash.items())
 	output = open("db_with_"+ref+".csv", "w")
 	
-	if ref == "lwj":
+	if ref == "all":
+		all_pair = get_set_of_pair(p_hash.keys())
+		lwj_network = lwj.create_lwj_network(piv_w_value=1)
+		v_network = vt.create_vote_network(piv_w_value=1)
+		cb_network = cb.create_cb_network(piv_w_value=1)
+		output.write(",".join(["p1", "p2", "fep_w", "sep_w", "v_w", "lwj_w", "cb_w"])+"\r\n")
+		for pair in all_pair:
+			fep_w = get_w(fep_network, pair)
+			sep_w = get_w(sep_network, pair)
+			lwj_w = get_w(lwj_network, pair)
+			v_w = get_w(v_network, pair)
+			cb_w = get_w(cb_network, pair)
+			
+			line_arr = [p_hash[pid] for pid in pair] + [str(fep_w), str(sep_w), str(v_w), str(lwj_w), str(cb_w)]
+			line = ",".join(line_arr)
+			output.write(line+"\r\n")
+	
+
+	elif ref == "lwj":
 		lwj_network = lwj.create_lwj_network(piv_w_value=1)
 		for lwj_pair in lwj_network.keys():
-			fep_w = fep_network[lwj_pair]
-			sep_w = sep_network[lwj_pair]
+			fep_w = get_w(fep_network, lwj_pair)
+			sep_w = get_w(sep_network, lwj_pair)
 			lwj_w = lwj_network[lwj_pair]
 
 			line_arr = [p_hash[pid] for pid in lwj_pair] + [str(fep_w), str(sep_w), str(lwj_w)]
@@ -37,8 +55,8 @@ def export_all_db(request, ref):
 	elif ref == "vote":
 		v_network = vt.create_vote_network(piv_w_value=1)
 		for v_pair in v_network.keys():
-			fep_w = fep_network[v_pair]
-			sep_w = sep_network[v_pair]
+			fep_w = get_w(fep_network, v_pair)
+			sep_w = get_w(sep_network, v_pair)
 			v_w = v_network[v_pair]
 
 			line_arr = [p_hash[pid] for pid in v_pair] + [str(fep_w), str(sep_w), str(v_w)]
@@ -48,8 +66,8 @@ def export_all_db(request, ref):
 	elif ref == "cobill":
 		cb_network = cb.create_cb_network(piv_w_value=1)
 		for cb_pair in cb_network.keys():
-			fep_w = fep_network[cb_pair]
-			sep_w = sep_network[cb_pair]
+			fep_w = get_w(fep_network, cb_pair)
+			sep_w = get_w(sep_network, cb_pair)
 			cb_w = cb_network[cb_pair]
 		
 			line_arr = [p_hash[pid] for pid in cb_pair] + [str(fep_w), str(sep_w), str(cb_w)]
@@ -58,6 +76,12 @@ def export_all_db(request, ref):
 
 	output.close()	
 	return HttpResponse("success!")
+
+def get_w(network, pair):
+	try:
+		return network[pair]
+	except KeyError:
+		return "-"
 
 def reg_network(request, network):
 	my_pobj_list = fem.Politician.objects.all()

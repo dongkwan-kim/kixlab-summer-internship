@@ -72,9 +72,9 @@ def create_vote_network(piv_w_value=0.15):
 	rv_network = {}
 	v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
 	for k, v in v_network.items():
-		if v > v_piv_ascend:
+		if v >= v_piv_ascend:
 			rv_network[k] = v
-
+	
 	return rv_network
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
