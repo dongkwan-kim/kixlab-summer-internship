@@ -1,0 +1,6 @@
+{
+  "name": "Kixlab-summer-internship",
+  "tagline": "KIXLAB | preparatory experiment of priendship(tentative)",
+  "body": "# preparatory experiment of priendship(tentative)\r\n- 2016. 08. 03\r\n- from KIXLAB: KAIST Interaction Lab.\r\n\r\n## Collecting pairwise affinity of politicians using social game\r\n\r\n### firstexp\r\n![firstexp](https://raw.githubusercontent.com/todoaskit/prexp-priendship/master/picture/firstexp.jpg) \r\n\r\n### secondexp\r\n![secondexp](https://raw.githubusercontent.com/todoaskit/prexp-priendship/master/picture/secondexp.jpg)\r\n\r\n### thirdexp\r\n- Temporary stopped\r\n- Topic changed at 2016.08.17\r\n- Idea from Turing Test\r\n- Create AI with Microsoft Emotion API and Naver Image API\r\n- Show users some PPAs of someone(either AI or Human) scored. Users will grade PPA to judge whether someone is AI or Human.\r\n\r\n### fourthexp\r\n- Before users start game, they choose their favorite politician.\r\n- Others are same as firstexp",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
