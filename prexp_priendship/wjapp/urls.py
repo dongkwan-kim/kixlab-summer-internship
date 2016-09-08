@@ -18,9 +18,9 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 
 urlpatterns = [
-	url(r"^$", "wjapp.views.analyze"),
-	url(r"^reg/network/([\w \[\]\.]+)/", "wjapp.views.reg_network"),
-	url(r"^reg/db/([\w \[\]\.]+)/", "wjapp.views.reg_db"),
-	url(r"^export/([\w \[\]\.]+)/", "wjapp.views.export_all_db"),
-	url(r"vis/([\w \[\]\.]+)/", "wjapp.views.ref_visualize"),
+    url(r"^$", "wjapp.views.analyze"),
+    url(r"^reg/network/([\w \[\]\.]+)/", "wjapp.views.reg_network"),
+    url(r"^reg/db/([\w \[\]\.]+)/", "wjapp.views.reg_db"),
+    url(r"^export/([\w \[\]\.]+)/", "wjapp.views.export_all_db"),
+    url(r"vis/([\w \[\]\.]+)/", "wjapp.views.ref_visualize"),
 ]

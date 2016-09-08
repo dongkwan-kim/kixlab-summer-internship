@@ -18,9 +18,9 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-	url(r"^$", "adminapp.views.top_front"),
-	url(r"^firstexp/", include("firstexp.urls")),
-	url(r"^secondexp/", include("secondexp.urls")),
-	url(r"^fourthexp/", include("fourthexp.urls")),
+    url(r"^$", "adminapp.views.top_front"),
+    url(r"^firstexp/", include("firstexp.urls")),
+    url(r"^secondexp/", include("secondexp.urls")),
+    url(r"^fourthexp/", include("fourthexp.urls")),
     url(r"^analyze/", include("wjapp.urls")),
 ]

@@ -4,22 +4,22 @@ from wjapp.models import Vote19, VoteVector, CoBill20
 # Register your models here.
 
 class LWJNetworkAdmin(admin.ModelAdmin):
-	list_display = ("p1", "p2", "weight")
+    list_display = ("p1", "p2", "weight")
 
 class Vote19Admin(admin.ModelAdmin):
-	list_display = ("name", "party")
+    list_display = ("name", "party")
 
 class VoteVectorAdmin(admin.ModelAdmin):
-	list_display = ("name", "party")
+    list_display = ("name", "party")
 
 class VoteNetworkAdmin(admin.ModelAdmin):
-	list_display = ("p1", "p2", "weight")
+    list_display = ("p1", "p2", "weight")
 
 class CoBill20Admin(admin.ModelAdmin):
-	list_display = ("bill_no", "p_list")
+    list_display = ("bill_no", "p_list")
 
 class CoBillNetworkAdmin(admin.ModelAdmin):
-	list_display = ("p1", "p2", "weight")
+    list_display = ("p1", "p2", "weight")
 
 admin.site.register(LWJNetwork, LWJNetworkAdmin)
 admin.site.register(Vote19, Vote19Admin)

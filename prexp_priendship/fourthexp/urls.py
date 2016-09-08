@@ -20,11 +20,11 @@ from django.http import HttpResponseRedirect
 exp_name = "fourthexp"
 
 urlpatterns = [
-	url(r"^$", lambda r: HttpResponseRedirect("home/")),
-	url(r"^home/", exp_name + ".views.front"),
-	url(r"^start/", exp_name + ".views.start"),
-	url(r"^reg/", exp_name + ".views.reg_db"),
-	url(r"^export/", exp_name + ".views.export_logs"),
-	url(r"^vis/", exp_name + ".views.visualize"),
-	url(r"^favorite/", exp_name + ".views.favorite"),
+    url(r"^$", lambda r: HttpResponseRedirect("home/")),
+    url(r"^home/", exp_name + ".views.front"),
+    url(r"^start/", exp_name + ".views.start"),
+    url(r"^reg/", exp_name + ".views.reg_db"),
+    url(r"^export/", exp_name + ".views.export_logs"),
+    url(r"^vis/", exp_name + ".views.visualize"),
+    url(r"^favorite/", exp_name + ".views.favorite"),
 ]

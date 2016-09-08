@@ -8,161 +8,161 @@ import math
 
 
 def int_vectorize():
-	"""
-	Vote19 to VoteVector
-	"""
-	vote_db = Vote19.objects.all()
-	my_p_list = fem.Politician.objects.all()
-	
-	vote_vector_db = VoteVector.objects.all()
-	for v in vote_vector_db:
-		v.delete()
+    """
+    Vote19 to VoteVector
+    """
+    vote_db = Vote19.objects.all()
+    my_p_list = fem.Politician.objects.all()
 
-	for vote in vote_db:
-		for p in my_p_list:
-			# only intersection of mine and 19's
-			if vote.name == p.name:
-				v_list = vote.vote.split(",")
-				vectorized_list = []
-				for v_word in v_list:
-					if v_word == "찬성":
-						vectorized_list.append("1")
-					elif v_word == "반대":
-						vectorized_list.append("-1")
-					else:
-						# abstention, absence, etc.
-						vectorized_list.append("0")
-				new_vv = VoteVector(name=vote.name, party=vote.party, vote=",".join(vectorized_list))
-				new_vv.save()
+    vote_vector_db = VoteVector.objects.all()
+    for v in vote_vector_db:
+        v.delete()
+
+    for vote in vote_db:
+        for p in my_p_list:
+            # only intersection of mine and 19's
+            if vote.name == p.name:
+                v_list = vote.vote.split(",")
+                vectorized_list = []
+                for v_word in v_list:
+                    if v_word == "찬성":
+                        vectorized_list.append("1")
+                    elif v_word == "반대":
+                        vectorized_list.append("-1")
+                    else:
+                        # abstention, absence, etc.
+                        vectorized_list.append("0")
+                new_vv = VoteVector(name=vote.name, party=vote.party, vote=",".join(vectorized_list))
+                new_vv.save()
 
 def get_eud(vv1, vv2):
-	"""
-	:param vv1, vv2: VoteVector.vote 1,0,-1,1, ... ,
-	:return: Euclidean distance of vv1 and vv2
-	"""
-	vv1_list = [int(v) for v in vv1.split(",")]
-	vv2_list = [int(v) for v in vv2.split(",")]
+    """
+    :param vv1, vv2: VoteVector.vote 1,0,-1,1, ... ,
+    :return: Euclidean distance of vv1 and vv2
+    """
+    vv1_list = [int(v) for v in vv1.split(",")]
+    vv2_list = [int(v) for v in vv2.split(",")]
 
-	if len(vv1_list) != len(vv2_list):
-		raise(Exception("VectorLengthDifferentError"))
+    if len(vv1_list) != len(vv2_list):
+        raise(Exception("VectorLengthDifferentError"))
 
-	eud = math.sqrt(sum([(e1 - e2)**2 for (e1, e2) in zip(vv1_list, vv2_list)]))
-	return eud
+    eud = math.sqrt(sum([(e1 - e2)**2 for (e1, e2) in zip(vv1_list, vv2_list)]))
+    return eud
 
 def get_attendance(vv):
-	vv_list = vv.split(",")
-	return 1 - vv_list.count("0")/len(vv_list)
+    vv_list = vv.split(",")
+    return 1 - vv_list.count("0")/len(vv_list)
 
 def create_vote_network(piv_w_value=0.15):
-	"""
-	:return: dict {(pid_x, pid_y): "weight"}
-	"""
-	#vv_list = VoteVector.objects.all()
-	
-	p_hash = fsla.create_p_hash()
-	pid_hash = dict((y, x) for (x, y) in p_hash.items())
-	Vote = VoteNetwork.objects.all()
+    """
+    :return: dict {(pid_x, pid_y): "weight"}
+    """
+    #vv_list = VoteVector.objects.all()
 
-	v_network = {}
-	for obj_vote in Vote:
-		pair = [obj_vote.p1, obj_vote.p2]
-		pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
-		v_network[pid_pair] = obj_vote.weight	
-	
-	rv_network = {}
-	v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
-	for k, v in v_network.items():
-		if v >= v_piv_ascend:
-			rv_network[k] = v
-	
-	return rv_network
+    p_hash = fsla.create_p_hash()
+    pid_hash = dict((y, x) for (x, y) in p_hash.items())
+    Vote = VoteNetwork.objects.all()
+
+    v_network = {}
+    for obj_vote in Vote:
+        pair = [obj_vote.p1, obj_vote.p2]
+        pid_pair = tuple(sorted([pid_hash[p] for p in pair]))
+        v_network[pid_pair] = obj_vote.weight
+
+    rv_network = {}
+    v_piv_ascend = get_piv(v_network.values(), piv_w_value, option="ascend")
+    for k, v in v_network.items():
+        if v >= v_piv_ascend:
+            rv_network[k] = v
+
+    return rv_network
 
 def create_visjs_network_from_raw(p_network, p_hash, option=0):
-	"""
-	:param p_network: dict {"(pid_x, pid_y)": "weight"}
-	:param p_hash: dict {"pid":"p_name"}
-	:return: tuple (node_list, edge_list)
-	"""
-	node_list = []
-	edge_list = []
-	node_color = {"background": "white", "border": "#455a64"}
+    """
+    :param p_network: dict {"(pid_x, pid_y)": "weight"}
+    :param p_hash: dict {"pid":"p_name"}
+    :return: tuple (node_list, edge_list)
+    """
+    node_list = []
+    edge_list = []
+    node_color = {"background": "white", "border": "#455a64"}
 
-	for x, y in sorted(p_network, key=p_network.get, reverse=True):
-		if p_network[(x, y)] != 0:
-			px = str(p_hash[x])
-			py = str(p_hash[y])
-			weight = p_network[(x, y)]
+    for x, y in sorted(p_network, key=p_network.get, reverse=True):
+        if p_network[(x, y)] != 0:
+            px = str(p_hash[x])
+            py = str(p_hash[y])
+            weight = p_network[(x, y)]
 
-			# only save node which has edges
-			node_x = {}
-			node_x["id"] = x
-			node_x["label"] = px
-			node_x["color"] = node_color
-			node_y = {}
-			node_y["id"] = y
-			node_y["label"] = py
-			node_y["color"] = node_color
-			if node_x not in node_list:
-				node_list.append(node_x)
-			if node_y not in node_list:
-				node_list.append(node_y)
+            # only save node which has edges
+            node_x = {}
+            node_x["id"] = x
+            node_x["label"] = px
+            node_x["color"] = node_color
+            node_y = {}
+            node_y["id"] = y
+            node_y["label"] = py
+            node_y["color"] = node_color
+            if node_x not in node_list:
+                node_list.append(node_x)
+            if node_y not in node_list:
+                node_list.append(node_y)
 
-			edge = {}
-			edge["from"] = x
-			edge["to"] = y
-			edge["color"] = {"color": "grey", "highlight": "#90CAF9"}
-			edge["value"] = abs(weight)
-			edge_list.append(edge)
+            edge = {}
+            edge["from"] = x
+            edge["to"] = y
+            edge["color"] = {"color": "grey", "highlight": "#90CAF9"}
+            edge["value"] = abs(weight)
+            edge_list.append(edge)
 
-	return (node_list, edge_list)
+    return (node_list, edge_list)
 
 def create_visjs_vote_network():
-	v_network = create_vote_network()
-	p_hash = fsla.create_p_hash()
-	return create_visjs_network_from_raw(v_network, p_hash)
+    v_network = create_vote_network()
+    p_hash = fsla.create_p_hash()
+    return create_visjs_network_from_raw(v_network, p_hash)
 
 def get_piv(l, c, option="ascend"):
-	if option == "ascend":
-		sl = list(reversed(sorted([x for x in l])))
-	else:
-		sl = list(sorted([x for x in l]))
-	length = len(l)
+    if option == "ascend":
+        sl = list(reversed(sorted([x for x in l])))
+    else:
+        sl = list(sorted([x for x in l]))
+    length = len(l)
 
-	if c != 1:
-		pidx = int(c*length)
-		return sl[pidx]
-	else:
-		return sl[-1] - 1
+    if c != 1:
+        pidx = int(c*length)
+        return sl[pidx]
+    else:
+        return sl[-1] - 1
 
 def crawl(num):
-	"""
-	:param num: num of congressman, max=293
-	:crawl vote result of 19th assembly
-	"""
-	vote_db = Vote19.objects.all()
-	
-	# start from previous index
-	for num in range(len(vote_db)+1, num):
-		base_url = "http://read-data.codenamu.org/congress-report/api/congress_people/"
-		base_url += str(num) + ".json"
-		request = urllib.request.Request(base_url, headers={'User-Agent': 'Mozilla/5.0'})
-		response = urllib.request.urlopen(request)
-		js = json.loads(response.read().decode("utf-8"))
+    """
+    :param num: num of congressman, max=293
+    :crawl vote result of 19th assembly
+    """
+    vote_db = Vote19.objects.all()
 
-		name = js["congress_person"]["name_kr"]
-		party = js["congress_person"]["party"]
-		vote_list = js["congress_person"]["bill_votes"]
-		vote_hash = {}
-		for vote in vote_list:
-			vote_hash[vote["bill_id"]] = vote["vote"]
+    # start from previous index
+    for num in range(len(vote_db)+1, num):
+        base_url = "http://read-data.codenamu.org/congress-report/api/congress_people/"
+        base_url += str(num) + ".json"
+        request = urllib.request.Request(base_url, headers={'User-Agent': 'Mozilla/5.0'})
+        response = urllib.request.urlopen(request)
+        js = json.loads(response.read().decode("utf-8"))
 
-		new_vote_list = []
-		for i in range(1, 2571):
-			try:
-				new_vote_list.append(vote_hash[i])
-			except:
-				new_vote_list.append("없음")
-	
-		vote_line = ",".join(new_vote_list)
-		new_model = Vote19(name=name, party=party, vote=vote_line)
-		new_model.save()
+        name = js["congress_person"]["name_kr"]
+        party = js["congress_person"]["party"]
+        vote_list = js["congress_person"]["bill_votes"]
+        vote_hash = {}
+        for vote in vote_list:
+            vote_hash[vote["bill_id"]] = vote["vote"]
+
+        new_vote_list = []
+        for i in range(1, 2571):
+            try:
+                new_vote_list.append(vote_hash[i])
+            except:
+                new_vote_list.append("없음")
+
+        vote_line = ",".join(new_vote_list)
+        new_model = Vote19(name=name, party=party, vote=vote_line)
+        new_model.save()

@@ -37,11 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'adminapp',
-	'firstexp',
-	'secondexp',
-	'thirdexp',
-	'fourthexp',
+    'adminapp',
+    'firstexp',
+    'secondexp',
+    'thirdexp',
+    'fourthexp',
     'wjapp',
 )
 
@@ -62,8 +62,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-					os.path.join(BASE_DIR, "templates"),
-				],
+                    os.path.join(BASE_DIR, "templates"),
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

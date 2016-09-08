@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 
 urlpatterns = [
-	url(r"^$", lambda r: HttpResponseRedirect("home/")),
-	url(r"^home/", "secondexp.views.front"),
-	url(r"^deploy/home/", "secondexp.views.deploy_front"),
-	url(r"^start/", "secondexp.views.start"),
-	url(r"^deploy/start/", "secondexp.views.deploy_start"),
-	url(r"^reg/", "secondexp.views.reg_db"),
-	url(r"^export/", "secondexp.views.export_logs"),
-	url(r"^vis/", "secondexp.views.visualize"),
+    url(r"^$", lambda r: HttpResponseRedirect("home/")),
+    url(r"^home/", "secondexp.views.front"),
+    url(r"^deploy/home/", "secondexp.views.deploy_front"),
+    url(r"^start/", "secondexp.views.start"),
+    url(r"^deploy/start/", "secondexp.views.deploy_start"),
+    url(r"^reg/", "secondexp.views.reg_db"),
+    url(r"^export/", "secondexp.views.export_logs"),
+    url(r"^vis/", "secondexp.views.visualize"),
 ]
