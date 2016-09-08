@@ -1,6 +1,6 @@
 # preparatory experiment of priendship(tentative)
-- 2016. 08. 03
-- from KIXLAB: KAIST Interaction Lab.
+- 2016. 08. 03 ~ 08.31
+- from [KIXLAB | KAIST Interaction Lab](https//kixlab.org)
 
 ## Collecting pairwise affinity of politicians using social game
 
