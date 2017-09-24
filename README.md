@@ -1,5 +1,5 @@
 # Identifying contributing factors of pairwise affinity between politicians
-- 2016. 07. 01 ~ 08.31
+- 2016.07.01 ~ 2016.08.31
 - [KIXLAB | KAIST Interaction Lab](http://kixlab.org) Summer Internship 2016
 
 ## Motive
