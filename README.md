@@ -8,10 +8,10 @@
 ## Approach
 
 ### firstexp
-![firstexp](https://raw.githubusercontent.com/todoaskit/prexp-priendship/master/picture/firstexp.jpg) 
+![firstexp](https://raw.githubusercontent.com/dongkwan-kim/kixlab-summer-internship/master/picture/firstexp.jpg) 
 
 ### secondexp
-![secondexp](https://raw.githubusercontent.com/todoaskit/prexp-priendship/master/picture/secondexp.jpg)
+![secondexp](https://raw.githubusercontent.com/dongkwan-kim/kixlab-summer-internship/master/picture/secondexp.jpg)
 
 ### thirdexp
 - Stopped
@@ -25,7 +25,7 @@
 
 ## Result
 
-### [Correlation with other features](https://todoaskit.github.io/kixlab-summer-internship/templates/wjapp/analyze.html)
+### [Correlation with other features](https://dongkwan-kim.github.io/kixlab-summer-internship/templates/wjapp/analyze.html)
 - 19th Assembly Vote Result
 - 20th Assembly Features From Prof. Lee Wonjae
 - 20th Assembly Cosponsorship
